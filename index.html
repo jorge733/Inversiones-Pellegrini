@@ -7,25 +7,28 @@
 <meta name="description" content="Invertimos en oportunidades que generan valor. Asesoría estratégica en inversiones, gestión patrimonial y seguros.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Poppins:wght@300;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f6f4ef; --surface:#ffffff; --ink:#0f1b33; --muted:#5a6376;
-    --navy:#0f1b33; --navy-ink:#f3f1ea; --navy-muted:#aab3c5;
-    --accent:#b8893b; --accent-ink:#1a1305; --line:#e3dfd4;
+    --bg:#f5f7fb; --surface:#ffffff; --ink:#0f2547; --muted:#56637a;
+    --navy:#0f2547; --navy-ink:#f2f5fa; --navy-muted:#a9b6cc; --navy-accent:#6ea8ff;
+    --accent:#1f6fe0; --accent-ink:#ffffff; --line:#dfe5ef;
+    --logo-dark:#0f2547; --logo-blue:#1f6fe0;
     --radius:14px; --max:1120px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#0c1322; --surface:#141d31; --ink:#edf0f5; --muted:#a3acbd;
-      --navy:#081020; --navy-ink:#edf0f5; --navy-muted:#97a1b5;
-      --accent:#d4a657; --accent-ink:#1a1305; --line:#243049;
+      --bg:#0b1324; --surface:#131e35; --ink:#edf1f7; --muted:#a1adc2;
+      --navy:#07101f; --navy-ink:#edf1f7; --navy-muted:#97a3b8; --navy-accent:#6ea8ff;
+      --accent:#4b8df0; --accent-ink:#06101f; --line:#24304a;
+      --logo-dark:#edf1f7; --logo-blue:#4b8df0;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#0c1322; --surface:#141d31; --ink:#edf0f5; --muted:#a3acbd;
-    --navy:#081020; --navy-ink:#edf0f5; --navy-muted:#97a1b5;
-    --accent:#d4a657; --accent-ink:#1a1305; --line:#243049;
+    --bg:#0b1324; --surface:#131e35; --ink:#edf1f7; --muted:#a1adc2;
+    --navy:#07101f; --navy-ink:#edf1f7; --navy-muted:#97a3b8; --navy-accent:#6ea8ff;
+    --accent:#4b8df0; --accent-ink:#06101f; --line:#24304a;
+    --logo-dark:#edf1f7; --logo-blue:#4b8df0;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth;scroll-padding-top:72px}
@@ -42,18 +45,22 @@
   .todo{background:color-mix(in srgb,var(--accent) 18%,transparent);border-radius:4px;padding:0 .3em;font-style:normal}
 
   /* Header */
-  header{position:sticky;top:0;z-index:10;background:var(--navy);color:var(--navy-ink)}
-  header .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
-  .logo{font-family:Fraunces,serif;font-weight:600;font-size:1.2rem;text-decoration:none;white-space:nowrap;letter-spacing:.02em}
-  .logo span{color:var(--accent)}
-  nav{display:flex;gap:20px;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
-  nav a{text-decoration:none;color:var(--navy-muted)}
-  nav a:hover{color:var(--navy-ink)}
-  .menu-btn{display:none;background:none;border:1px solid var(--navy-muted);color:var(--navy-ink);border-radius:8px;padding:6px 10px;font:inherit}
+  header{position:sticky;top:0;z-index:10;background:var(--surface);color:var(--ink);border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+  .logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--logo-dark);line-height:1}
+  .logo svg{height:40px;width:auto;flex:none}
+  .logo .wm{font-family:Poppins,Inter,sans-serif;display:flex;flex-direction:column;gap:1px}
+  .logo .wm b{font-weight:700;font-size:1.02rem;letter-spacing:.02em}
+  .logo .wm span{font-weight:300;font-size:1.02rem;letter-spacing:.05em;color:var(--logo-blue)}
+  footer .logo{--logo-dark:var(--navy-ink);margin-bottom:12px}
+  nav{display:flex;gap:20px;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+  nav a{text-decoration:none;color:var(--muted)}
+  nav a:hover{color:var(--accent)}
+  .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;font:inherit}
   @media (max-width:960px){
     .menu-btn{display:block}
-    nav{display:none;position:absolute;top:68px;left:0;right:0;background:var(--navy);flex-direction:column;padding:8px 16px 18px;gap:0}
-    nav a{padding:12px 0;border-top:1px solid #ffffff14}
+    nav{display:none;position:absolute;top:72px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--line);flex-direction:column;padding:8px 16px 18px;gap:0}
+    nav a{padding:12px 0;border-top:1px solid var(--line)}
     nav.open{display:flex}
   }
 
@@ -63,6 +70,7 @@
                border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
                box-shadow:0 0 0 60px color-mix(in srgb,var(--accent) 5%,transparent),0 0 0 140px color-mix(in srgb,var(--accent) 3%,transparent)}
   .hero .wrap{position:relative;z-index:1}
+  .hero .eyebrow{color:var(--navy-accent)}
   .hero h1{font-size:clamp(2.3rem,5.4vw,4rem);max-width:15ch}
   .hero p{color:var(--navy-muted);font-size:1.2rem;max-width:52ch;margin:0 0 32px}
   .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
@@ -139,12 +147,25 @@
 </style>
 </head>
 <body>
-
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <mask id="p-hole"><rect width="60" height="72" fill="#fff"/><circle cx="37" cy="40" r="9" fill="#000"/></mask>
+    <clipPath id="p-low"><rect x="0" y="44" width="60" height="28"/></clipPath>
+  </defs>
+  <symbol id="logo-mark" viewBox="0 0 60 72">
+    <circle cx="8" cy="8" r="7" style="fill:var(--logo-blue)"/>
+    <g mask="url(#p-hole)">
+      <circle cx="36" cy="40" r="22" fill="currentColor"/>
+      <circle cx="36" cy="40" r="22" clip-path="url(#p-low)" style="fill:var(--logo-blue)"/>
+      <rect x="6" y="18" width="16" height="54" rx="2" fill="currentColor"/>
+    </g>
+  </symbol>
+</svg>
 <div class="proto">PROTOTIPO · contenido por validar</div>
 
 <header>
   <div class="wrap">
-    <a href="#inicio" class="logo">INVERSIONES <span>PELLEGRINI</span></a>
+    <a href="#inicio" class="logo"><svg viewBox="0 0 60 72" role="img" aria-label="Inversiones Pellegrini"><use href="#logo-mark"/></svg><span class="wm"><b>INVERSIONES</b><span>PELLEGRINI</span></span></a>
     <button class="menu-btn" aria-label="Abrir menú" onclick="document.querySelector('nav').classList.toggle('open')">Menú</button>
     <nav onclick="this.classList.remove('open')">
       <a href="#inicio">Inicio</a>
@@ -319,7 +340,7 @@
 
 <footer>
   <div class="wrap">
-    <p class="logo">INVERSIONES <span style="color:var(--accent)">PELLEGRINI</span></p>
+    <div class="logo"><svg viewBox="0 0 60 72" role="img" aria-label="Inversiones Pellegrini"><use href="#logo-mark"/></svg><span class="wm"><b>INVERSIONES</b><span>PELLEGRINI</span></span></div>
     <p>© 2026 Inversiones Pellegrini. Todos los derechos reservados.</p>
     <p>La información contenida en este sitio es referencial y no constituye una oferta, recomendación ni garantía de rentabilidad. Toda inversión conlleva riesgos.</p>
   </div>
