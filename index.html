@@ -65,7 +65,13 @@
   }
 
   /* Hero */
-  .hero{background:var(--navy);color:var(--navy-ink);padding:96px 0 104px;text-align:center}
+  .hero{background:var(--navy);color:var(--navy-ink);padding:96px 0 104px;text-align:center;position:relative;overflow:hidden}
+  .hero .wrap{position:relative;z-index:1}
+  .hero-mark{position:absolute;right:-120px;top:-60px;width:520px;height:520px;border-radius:50%;display:grid;place-items:center;
+             border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+             box-shadow:0 0 0 60px color-mix(in srgb,var(--accent) 5%,transparent),0 0 0 140px color-mix(in srgb,var(--accent) 3%,transparent)}
+  .hero-mark svg{height:190px;width:auto;color:var(--navy-ink);opacity:.9;transform:translate(-50px,10px)}
+  @media (max-width:1100px){ .hero-mark{display:none} }
   .hero .eyebrow{color:var(--navy-accent)}
   .hero h1{font-size:clamp(2.3rem,5.4vw,4rem);max-width:20ch;margin-inline:auto}
   .hero p{color:var(--navy-muted);font-size:1.2rem;max-width:52ch;margin:0 auto 32px}
@@ -176,6 +182,7 @@
 
 <main>
   <section class="hero" id="inicio">
+    <div class="hero-mark" aria-hidden="true"><svg viewBox="0 0 60 72"><use href="#logo-mark"/></svg></div>
     <div class="wrap">
       <h1>Invertimos en el mercado nacional e internacional</h1>
       <p>Te acompañamos con una visión profesional, personalizada, de mediano y largo plazo.</p>
