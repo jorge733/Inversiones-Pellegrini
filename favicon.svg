@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <mask id="hole"><rect width="60" height="72" fill="#fff"/><circle cx="37" cy="40" r="9" fill="#000"/></mask>
+    <clipPath id="low"><rect x="0" y="44" width="60" height="28"/></clipPath>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#ffffff"/>
+  <g transform="translate(10.4 5.3) scale(.732)">
+    <circle cx="8" cy="8" r="7" fill="#1f6fe0"/>
+    <g mask="url(#hole)">
+      <circle cx="36" cy="40" r="22" fill="#0f2547"/>
+      <circle cx="36" cy="40" r="22" fill="#1f6fe0" clip-path="url(#low)"/>
+      <rect x="6" y="18" width="16" height="54" rx="2" fill="#0f2547"/>
+    </g>
+  </g>
+</svg>
