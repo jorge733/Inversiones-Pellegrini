@@ -89,6 +89,10 @@
 
   /* Services */
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+  /* Cuatro servicios: 4 columnas en pantallas anchas, 2x2 en medianas, 1 en celular */
+  #servicios .grid{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:1000px){ #servicios .grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ #servicios .grid{grid-template-columns:1fr} }
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column}
   .alt .card{background:var(--bg)}
   .card .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
@@ -205,21 +209,27 @@
       <div class="grid">
         <article class="card">
           <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
-          <h3>Asesoría de Inversiones</h3>
-          <p>Orientación y análisis de alternativas de inversión de acuerdo con tus objetivos y necesidades.</p>
-          <a href="#contacto" class="link" data-motivo="Solicitar asesoría">Solicitar asesoría →</a>
+          <h3>Inversión Nacional</h3>
+          <p>Alternativas de inversión en el mercado chileno, de acuerdo con tus objetivos y perfil de riesgo.</p>
+          <a href="#contacto" class="link" data-motivo="Inversión nacional">Consultar →</a>
         </article>
         <article class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg></div>
-          <h3>Gestión Patrimonial</h3>
-          <p>Planificación y estrategias para proteger, administrar y hacer crecer tu patrimonio personal y familiar.</p>
-          <a href="#contacto" class="link" data-motivo="Hablar con un asesor">Hablar con un asesor →</a>
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg></div>
+          <h3>Inversión Internacional</h3>
+          <p>Oportunidades en mercados internacionales para diversificar y proteger tu patrimonio.</p>
+          <a href="#contacto" class="link" data-motivo="Inversión internacional">Consultar →</a>
         </article>
         <article class="card">
           <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></div>
-          <h3>Seguros</h3>
-          <p>Soluciones de protección patrimonial y seguros de vida para ti y tu familia. <i class="todo">Tipos de seguro por definir</i></p>
-          <a href="#contacto" class="link" data-motivo="Seguros">Consultar →</a>
+          <h3>Seguro de Vida</h3>
+          <p>Protección para ti y tu familia, con coberturas adaptadas a tus necesidades.</p>
+          <a href="#contacto" class="link" data-motivo="Seguro de vida">Consultar →</a>
+        </article>
+        <article class="card">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></div>
+          <h3>Leaseback</h3>
+          <p>Vende tu propiedad y sigue usándola en arriendo, liberando capital para nuevos proyectos.</p>
+          <a href="#contacto" class="link" data-motivo="Leaseback">Consultar →</a>
         </article>
       </div>
     </div>
@@ -321,7 +331,10 @@
             <option>Quiero invertir</option>
             <option>Conocer una oportunidad</option>
             <option>Evaluar mi proyecto</option>
-            <option>Seguros</option>
+            <option>Inversión nacional</option>
+            <option>Inversión internacional</option>
+            <option>Seguro de vida</option>
+            <option>Leaseback</option>
             <option>Hablar con un asesor</option>
           </select>
         </label>
