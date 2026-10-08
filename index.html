@@ -180,6 +180,8 @@
          background:repeating-linear-gradient(135deg,var(--line) 0 12px,transparent 12px 24px),var(--bg)}
   .role{color:var(--accent);font-weight:600;margin:-.3em 0 1em}
   .about p{color:var(--muted)}
+  .photo{overflow:hidden;background:none}
+  .photo img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
   @media (max-width:780px){ .about{grid-template-columns:1fr;gap:28px} .photo{max-width:260px} }
 
   /* CTA band */
@@ -306,7 +308,7 @@
 
   <section id="quienes-somos" class="alt">
     <div class="wrap about">
-      <div class="photo">Fotografía de Luciano Pellegrini</div>
+      <div class="photo"><img src="luciano-pellegrini.jpg" alt="Luciano Pellegrini" width="720" height="1059" loading="lazy"></div>
       <div>
         <div class="eyebrow">Quiénes somos</div>
         <h2>Luciano Pellegrini</h2>
