@@ -1,0 +1,13 @@
+{
+  "name": "inversiones-pellegrini",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio web de Inversiones Pellegrini con panel de administración.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node herramientas/construir.js",
+    "dev": "node herramientas/servidor-local.js"
+  }
+}

@@ -1,5 +1,10 @@
-﻿*.ogg
+*.ogg
 *.mp3
 *.m4a
 
 *.pdf
+# Sitio generado por herramientas/construir.js
+public/
+# Variables de entorno locales
+.env
+node_modules/

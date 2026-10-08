@@ -1,0 +1,59 @@
+{
+  "bienvenida": {
+    "titulo": "Invertimos en el mercado nacional e internacional",
+    "texto": "Te acompañamos con una visión profesional, personalizada, de mediano y largo plazo.",
+    "boton": "Solicita asesoría"
+  },
+  "oportunidades": {
+    "titulo": "Oportunidades de inversión",
+    "subtitulo": "Soluciones de inversión de mediano y largo plazo",
+    "tarjetas": [
+      {
+        "icono": "grafico",
+        "titulo": "Inversión Nacional",
+        "descripcion": "Fondo de Inversión con Garantía Inmobiliaria: instrumento de inversión con respaldo en bienes raíces, ofreciendo una rentabilidad anual del 7% más UF, con un plazo de permanencia de 24 meses y pagos de rentabilidad semestrales."
+      },
+      {
+        "icono": "globo",
+        "titulo": "Inversión Internacional",
+        "descripcion": "Fondo de deuda: es un instrumento de inversión que reúne capital de distintos inversionistas para financiar a empresas mediante préstamos, generando rentabilidad a través del pago de intereses y la devolución del capital."
+      },
+      {
+        "icono": "escudo",
+        "titulo": "Seguro de Vida",
+        "descripcion": "Protección para ti y tu familia, con coberturas adaptadas a tus necesidades."
+      },
+      {
+        "icono": "casa",
+        "titulo": "Leaseback",
+        "descripcion": "Leaseback es un financiamiento entre privados, donde el inversionista presta capital y el deudor deja un bien raíz como garantía de pago."
+      }
+    ],
+    "aviso": "La información presentada tiene carácter informativo y no constituye una oferta ni recomendación de inversión. Toda inversión conlleva riesgos y las rentabilidades pasadas no garantizan rentabilidades futuras."
+  },
+  "porQue": {
+    "etiqueta": "Por qué elegirnos",
+    "titulo": "Oportunidades reales. Activos reales. Inversión con respaldo.",
+    "texto": "Creemos que una buena inversión comienza con información clara, respaldo y confianza. Seleccionamos oportunidades con foco inmobiliario y estructuramos alternativas de inversión pensadas para quienes buscan una visión de mediano y largo plazo."
+  },
+  "quienes": {
+    "nombre": "Luciano Pellegrini",
+    "descripcion": "Profesional con más de 20 años de trayectoria en el sector financiero, con un enfoque orientado a identificar oportunidades, generar valor y construir relaciones de largo plazo basadas en la confianza y la transparencia.",
+    "foto": "img/luciano-pellegrini.jpg"
+  },
+  "llamado": {
+    "titulo": "¿Listo para dar el siguiente paso con tu patrimonio?"
+  },
+  "contacto": {
+    "titulo": "Conversemos sobre tus objetivos",
+    "texto": "Déjanos tus datos y un asesor se pondrá en contacto contigo para evaluar tus necesidades.",
+    "whatsapp": "",
+    "correo": "",
+    "agenda": "",
+    "linkedin": "",
+    "instagram": ""
+  },
+  "pie": {
+    "aviso": "La información contenida en este sitio es referencial y no constituye una oferta, recomendación ni garantía de rentabilidad. Toda inversión conlleva riesgos."
+  }
+}

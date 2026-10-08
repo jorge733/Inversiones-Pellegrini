@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel · Inversiones Pellegrini</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <!-- Acceso -->
+  <main id="vista-acceso" class="acceso" hidden>
+    <form id="formulario-acceso" class="caja-acceso">
+      <img src="/favicon.svg" alt="" width="56" height="56">
+      <h1>Panel de administración</h1>
+      <p>Inversiones Pellegrini</p>
+      <label for="clave-admin">Contraseña</label>
+      <input id="clave-admin" type="password" autocomplete="current-password" required>
+      <button class="boton" type="submit" id="boton-entrar">Entrar</button>
+      <p class="error" id="error-acceso" role="alert"></p>
+    </form>
+  </main>
+
+  <!-- Panel -->
+  <div id="vista-panel" class="panel" hidden>
+    <header class="barra-superior">
+      <a class="marca" href="/admin">
+        <img src="/favicon.svg" alt="" width="34" height="34">
+        <span>Inversiones Pellegrini<small>Panel de administración</small></span>
+      </a>
+      <div class="acciones-superiores">
+        <a class="boton secundario chico" href="/" target="_blank" rel="noopener">Ver el sitio ↗</a>
+        <button class="boton secundario chico" id="boton-salir" type="button">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <div class="cuerpo">
+      <nav class="menu" aria-label="Secciones del panel">
+        <label class="oculto-visual" for="menu-movil">Sección</label>
+        <select id="menu-movil"></select>
+        <ul id="menu-secciones"></ul>
+      </nav>
+      <main class="contenido" id="contenido" tabindex="-1">
+        <p class="cargando">Cargando contenido…</p>
+      </main>
+    </div>
+
+    <div class="barra-guardar" id="barra-guardar" hidden>
+      <span id="texto-guardar">Hay cambios sin guardar.</span>
+      <div>
+        <button class="boton secundario chico" id="boton-descartar" type="button">Descartar</button>
+        <button class="boton chico" id="boton-guardar" type="button">Guardar cambios</button>
+      </div>
+    </div>
+
+    <div class="aviso-flotante" id="aviso" role="status" aria-live="polite" hidden></div>
+  </div>
+
+  <script src="/admin/admin.js"></script>
+</body>
+</html>
