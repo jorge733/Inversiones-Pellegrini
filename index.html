@@ -56,7 +56,8 @@
   .logo .wm{font-family:Poppins,Inter,sans-serif;display:flex;flex-direction:column;gap:1px}
   .logo .wm b{font-weight:700;font-size:1.02rem;letter-spacing:.02em}
   .logo .wm span{font-weight:300;font-size:1.02rem;letter-spacing:.05em;color:var(--logo-blue)}
-  footer .logo{--logo-dark:var(--navy-ink);margin-bottom:12px}
+  /* Logo original (azul marino y azul) sobre una placa blanca para que se vea en el pie oscuro */
+  footer .logo{--logo-dark:#0f2547;--logo-blue:#1f6fe0;display:inline-flex;background:#fff;padding:10px 16px;border-radius:12px;margin-bottom:14px}
   header{transition:box-shadow .3s ease}
   header.scrolled{box-shadow:0 6px 24px #0f25471a}
   nav{display:flex;gap:22px;font-size:.95rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
@@ -206,7 +207,6 @@
 
   footer{background:var(--navy);color:var(--navy-muted);padding:36px 0;font-size:.85rem}
   footer p{margin:.4em 0;max-width:90ch}
-  footer .logo{color:var(--navy-ink)}
 
   .wa{position:fixed;right:18px;bottom:18px;z-index:20;width:56px;height:56px;border-radius:50%;background:#25d366;
       display:grid;place-items:center;box-shadow:0 6px 20px #0004}
