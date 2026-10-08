@@ -65,15 +65,11 @@
   }
 
   /* Hero */
-  .hero{background:var(--navy);color:var(--navy-ink);padding:96px 0 104px;position:relative;overflow:hidden}
-  .hero::after{content:"";position:absolute;right:-120px;top:-60px;width:520px;height:520px;border-radius:50%;
-               border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
-               box-shadow:0 0 0 60px color-mix(in srgb,var(--accent) 5%,transparent),0 0 0 140px color-mix(in srgb,var(--accent) 3%,transparent)}
-  .hero .wrap{position:relative;z-index:1}
+  .hero{background:var(--navy);color:var(--navy-ink);padding:96px 0 104px;text-align:center}
   .hero .eyebrow{color:var(--navy-accent)}
-  .hero h1{font-size:clamp(2.3rem,5.4vw,4rem);max-width:15ch}
-  .hero p{color:var(--navy-muted);font-size:1.2rem;max-width:52ch;margin:0 0 32px}
-  .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+  .hero h1{font-size:clamp(2.3rem,5.4vw,4rem);max-width:20ch;margin-inline:auto}
+  .hero p{color:var(--navy-muted);font-size:1.2rem;max-width:52ch;margin:0 auto 32px}
+  .hero .ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
   .hero .btn.ghost{color:var(--navy-ink)}
 
   section{padding:88px 0}
@@ -181,12 +177,10 @@
 <main>
   <section class="hero" id="inicio">
     <div class="wrap">
-      <div class="eyebrow">Asesoría estratégica en inversiones</div>
-      <h1>Invertimos en oportunidades que generan valor.</h1>
-      <p>Te acompañamos a analizar, decidir y hacer crecer tu patrimonio con una visión profesional, personalizada y de largo plazo.</p>
+      <h1>Invertimos en el mercado nacional e internacional</h1>
+      <p>Te acompañamos con una visión profesional, personalizada, de mediano y largo plazo.</p>
       <div class="ctas">
         <a href="#contacto" class="btn" data-motivo="Solicitar asesoría">Solicita asesoría</a>
-        <a href="#contacto" class="btn ghost" data-motivo="Quiero invertir">Quiero invertir</a>
       </div>
     </div>
   </section>
