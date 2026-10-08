@@ -89,10 +89,9 @@
 
   /* Services */
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-  /* Cuatro servicios: 4 columnas en pantallas anchas, 2x2 en medianas, 1 en celular */
-  #servicios .grid{grid-template-columns:repeat(4,1fr)}
-  @media (max-width:1000px){ #servicios .grid{grid-template-columns:repeat(2,1fr)} }
-  @media (max-width:560px){ #servicios .grid{grid-template-columns:1fr} }
+  /* Cuatro servicios en 2x2 para que las tarjetas sean anchas; 1 columna en celular */
+  #servicios .grid{grid-template-columns:repeat(2,1fr);gap:22px}
+  @media (max-width:640px){ #servicios .grid{grid-template-columns:1fr} }
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column}
   .alt .card{background:var(--bg)}
   .card .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
