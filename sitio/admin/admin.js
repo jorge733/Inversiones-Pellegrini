@@ -375,7 +375,7 @@
     var acciones = [
       el("label", { for: "foto-archivo", class: "boton secundario", texto: "Elegir otra foto" }),
       entrada,
-      el("p", { class: "ayuda", texto: "Se recomienda una foto vertical, con el rostro centrado. Se ajusta automáticamente a 900 px de ancho." })
+      el("p", { class: "ayuda", texto: "La foto se muestra en un círculo: conviene una imagen cuadrada, con el rostro centrado. Se ajusta automáticamente a 900 px de ancho." })
     ];
     if (estado.foto) {
       acciones.unshift(el("span", { class: "marca-pendiente", texto: "Foto nueva sin guardar" }));
