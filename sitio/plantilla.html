@@ -53,7 +53,9 @@
     --accent:#4b8df0; --accent-ink:#06101f; --line:#24304a;
     --logo-dark:#edf1f7; --logo-blue:#4b8df0;
   }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  /* Sin contorno al tocar o hacer clic; se mantiene al navegar con teclado */
+  a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
   html{scroll-behavior:smooth;scroll-padding-top:72px}
   body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif}
   h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0 0 .5em;font-weight:600}
