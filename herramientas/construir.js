@@ -47,11 +47,18 @@ function urlSegura(texto) {
   return /^https?:\/\//i.test(url) ? url : "";
 }
 
+// Si la descripción tiene varias líneas, la primera se muestra como subtítulo en negrita.
+function descripcionTarjeta(texto) {
+  const lineas = String(texto || "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  if (lineas.length < 2) return escapar(lineas[0] || "");
+  return `<strong class="card-sub">${escapar(lineas[0])}</strong>` + lineas.slice(1).map(escapar).join("<br>");
+}
+
 function tarjetas(datos) {
   return (datos.oportunidades.tarjetas || []).map((t) => `        <article class="card">
           <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">${ICONOS[t.icono] || ICONOS.grafico}</svg></div>
           <h3>${escapar(t.titulo)}</h3>
-          <p>${escapar(t.descripcion)}</p>
+          <p>${descripcionTarjeta(t.descripcion)}</p>
           <a href="#contacto" class="link" data-motivo="${escapar(t.titulo)}">Consultar →</a>
         </article>`).join("\n");
 }

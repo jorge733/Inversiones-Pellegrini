@@ -225,7 +225,7 @@
   function bloqueTarjetas() {
     var lista = estado.datos.oportunidades.tarjetas;
     var contenedor = el("div", { class: "tarjeta" }, [el("h3", { texto: "Tarjetas" }),
-      el("p", { class: "ayuda", texto: "Entre 1 y 8 tarjetas. El título de cada tarjeta también aparece como motivo de consulta en el formulario." })]);
+      el("p", { class: "ayuda", texto: "Entre 1 y 8 tarjetas. El título de cada tarjeta también aparece como motivo de consulta en el formulario. Si la descripción tiene más de una línea, la primera se muestra en negrita como subtítulo." })]);
 
     lista.forEach(function (t, i) {
       var vista = el("span", { class: "icono-vista", html: icono(t.icono) });
