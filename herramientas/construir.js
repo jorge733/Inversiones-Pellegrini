@@ -63,6 +63,12 @@ function tarjetas(datos) {
         </article>`).join("\n");
 }
 
+// Texto en párrafos: una línea en blanco separa párrafos; un salto simple se respeta como salto de línea.
+function parrafos(texto, sangria) {
+  return String(texto || "").split(/\r?\n\s*\r?\n/).map((p) => p.trim()).filter(Boolean)
+    .map((p) => `${sangria}<p>${p.split(/\r?\n/).map(escapar).join("<br>")}</p>`).join("\n");
+}
+
 const CHECK_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
 function puntos(datos) {
@@ -103,6 +109,7 @@ function renderizar(plantilla, datos) {
   const bloques = {
     TARJETAS: tarjetas(datos),
     PUNTOS: puntos(datos),
+    QUIENES_TEXTO: parrafos(datos.quienes && datos.quienes.descripcion, "        ").trimStart(),
     CANALES: canales(datos),
     MOTIVOS: motivos(datos),
     BOTON_WHATSAPP: botonWhatsapp(datos)

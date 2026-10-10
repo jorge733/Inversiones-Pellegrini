@@ -90,7 +90,7 @@ function validarDatos(d) {
     },
     quienes: {
       nombre: texto(s("quienes").nombre, "Nombre", 80, true),
-      descripcion: texto(s("quienes").descripcion, "Descripción", 1200, true),
+      descripcion: texto(s("quienes").descripcion, "Descripción", 2500, true),
       foto
     },
     llamado: {

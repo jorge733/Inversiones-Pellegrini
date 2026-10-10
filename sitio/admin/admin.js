@@ -54,7 +54,7 @@
       { foto: true },
       { campos: [
         { ruta: "quienes.nombre", etiqueta: "Nombre", max: 80 },
-        { ruta: "quienes.descripcion", etiqueta: "Descripción", max: 1200, largo: true }
+        { ruta: "quienes.descripcion", etiqueta: "Descripción", max: 2500, largo: true, ayuda: "Para separar párrafos, deja una línea en blanco entre ellos." }
       ] }
     ] },
     { id: "contacto", titulo: "Contacto", descripcion: "Datos de contacto, enlaces y la franja que invita a escribir.", bloques: [
