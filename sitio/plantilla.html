@@ -6,6 +6,25 @@
 <script>document.documentElement.classList.add("js")</script>
 <title>{{pagina.titulo}}</title>
 <meta name="description" content="{{pagina.descripcion}}">
+<link rel="canonical" href="{{pagina.url}}">
+<meta name="theme-color" content="#0f2547">
+<!-- Vista previa al compartir (WhatsApp, Facebook, LinkedIn, X) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Inversiones Pellegrini">
+<meta property="og:locale" content="es_CL">
+<meta property="og:title" content="{{pagina.titulo}}">
+<meta property="og:description" content="{{pagina.descripcion}}">
+<meta property="og:url" content="{{pagina.url}}">
+<meta property="og:image" content="{{pagina.imagen}}">
+<meta property="og:image:secure_url" content="{{pagina.imagen}}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Inversiones Pellegrini: invertimos en el mercado nacional e internacional">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{pagina.titulo}}">
+<meta name="twitter:description" content="{{pagina.descripcion}}">
+<meta name="twitter:image" content="{{pagina.imagen}}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">

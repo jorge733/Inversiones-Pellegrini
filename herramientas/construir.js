@@ -15,9 +15,13 @@ const ORIGEN = path.join(RAIZ, "sitio");
 const DESTINO = path.join(RAIZ, "public");
 const DATOS = path.join(RAIZ, "datos", "sitio.json");
 
+// Dirección pública del sitio: se usa en las etiquetas de vista previa al compartir, que exigen URLs completas.
+const DOMINIO = "https://www.inversionespellegrini.cl";
+const IMAGEN_COMPARTIR = DOMINIO + "/img/compartir.jpg";
+
 // Cada página del sitio. "salida" es el archivo en public/; con cleanUrls, /oportunidades sirve oportunidades.html.
 const PAGINAS = [
-  { id: "inicio", ruta: "/", salida: "index.html", menu: "Inicio", titulo: "Inversiones Pellegrini",
+  { id: "inicio", ruta: "/", salida: "index.html", menu: "Inicio", titulo: "Inversiones Pellegrini · Asesoría en inversiones",
     descripcion: "Invertimos en el mercado nacional e internacional. Asesoría en inversiones con visión de mediano y largo plazo." },
   { id: "oportunidades", ruta: "/oportunidades", salida: "oportunidades.html", menu: "Oportunidades de inversión",
     titulo: "Oportunidades de inversión · Inversiones Pellegrini",
@@ -224,7 +228,12 @@ function construir() {
       CONTENIDO: cuerpo,
       LLAMADO: p.sinLlamado ? "" : llamado,
       MENU: menu(p.id),
-      extra: { "pagina.titulo": p.titulo, "pagina.descripcion": p.descripcion }
+      extra: {
+        "pagina.titulo": p.titulo,
+        "pagina.descripcion": p.descripcion,
+        "pagina.url": DOMINIO + (p.ruta === "/" ? "/" : p.ruta),
+        "pagina.imagen": IMAGEN_COMPARTIR
+      }
     });
     fs.writeFileSync(path.join(DESTINO, p.salida), html);
   }
