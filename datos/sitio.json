@@ -34,7 +34,27 @@
   "porQue": {
     "etiqueta": "Por qué elegirnos",
     "titulo": "Oportunidades reales. Activos reales. Inversión con respaldo.",
-    "texto": "Creemos que una buena inversión comienza con información clara, respaldo y confianza. Seleccionamos oportunidades con foco inmobiliario y estructuramos alternativas de inversión pensadas para quienes buscan una visión de mediano y largo plazo."
+    "texto": "En Inversiones Pellegrini te ayudamos a explorar oportunidades de inversión en mercados internacionales, con alternativas que pueden contribuir a diversificar tu portafolio, acceder a distintos emisores y monedas, y construir una estrategia patrimonial alineada con tus objetivos financieros.",
+    "subtitulo": "¿Por qué considerar esta alternativa?",
+    "puntos": [
+      {
+        "titulo": "Diversificación internacional",
+        "texto": "Acceso a instrumentos y emisores de diferentes mercados."
+      },
+      {
+        "titulo": "Potencial de ingresos",
+        "texto": "Posibilidad de obtener rentabilidad mediante los intereses de los instrumentos."
+      },
+      {
+        "titulo": "Gestión profesional",
+        "texto": "Selección y seguimiento de activos según la estrategia del fondo."
+      },
+      {
+        "titulo": "Estrategia patrimonial",
+        "texto": "Una alternativa para complementar una cartera de inversiones diversificada."
+      }
+    ],
+    "cierre": "Invierte con visión global y decisiones informadas."
   },
   "quienes": {
     "nombre": "Luciano Pellegrini",

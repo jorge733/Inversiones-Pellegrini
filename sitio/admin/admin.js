@@ -36,11 +36,18 @@
           ayuda: "Si mencionas rentabilidades, conviene mantener este aviso." }
       ] }
     ] },
-    { id: "porQue", titulo: "Por qué elegirnos", descripcion: "El mensaje principal sobre la propuesta de valor.", bloques: [
+    { id: "porQue", titulo: "Por qué elegirnos", descripcion: "El mensaje principal sobre la propuesta de valor. A la derecha se muestra el logo.", bloques: [
       { campos: [
         { ruta: "porQue.etiqueta", etiqueta: "Etiqueta pequeña (sobre el título)", max: 60 },
         { ruta: "porQue.titulo", etiqueta: "Título", max: 160 },
         { ruta: "porQue.texto", etiqueta: "Texto", max: 1200, largo: true }
+      ] },
+      { titulo: "Lista de motivos", campos: [
+        { ruta: "porQue.subtitulo", etiqueta: "Subtítulo de la lista", max: 120 }
+      ] },
+      { puntos: true },
+      { campos: [
+        { ruta: "porQue.cierre", etiqueta: "Frase de cierre", max: 200 }
       ] }
     ] },
     { id: "quienes", titulo: "Quiénes somos", descripcion: "Tu presentación personal y tu fotografía.", bloques: [
@@ -280,6 +287,52 @@
     return contenedor;
   }
 
+  function bloquePuntos() {
+    var porQue = estado.datos.porQue;
+    var lista = porQue.puntos = porQue.puntos || [];
+    var contenedor = el("div", { class: "tarjeta" }, [el("h3", { texto: "Motivos" }),
+      el("p", { class: "ayuda", texto: "Hasta 8 motivos. Cada uno se muestra con un check, el título en negrita y el texto a continuación." })]);
+
+    lista.forEach(function (p, i) {
+      var titulo = el("input", { id: "punto-titulo-" + i, type: "text", autocomplete: "off" });
+      titulo.value = p.titulo;
+      var nombre = el("span", { texto: p.titulo || "Motivo " + (i + 1) });
+      titulo.addEventListener("input", function () { p.titulo = titulo.value; nombre.textContent = titulo.value || "Motivo " + (i + 1); actualizarEstado(); });
+      var texto = el("textarea", { id: "punto-texto-" + i, rows: 2 });
+      texto.value = p.texto;
+      texto.addEventListener("input", function () { p.texto = texto.value; actualizarEstado(); });
+      function mover(delta) {
+        var j = i + delta;
+        if (j < 0 || j >= lista.length) return;
+        lista.splice(j, 0, lista.splice(i, 1)[0]);
+        actualizarEstado(); dibujarSeccion();
+      }
+      contenedor.appendChild(el("div", { class: "item" }, [
+        el("div", { class: "item-cabecera" }, [
+          el("strong", {}, [nombre]),
+          el("div", { class: "item-acciones" }, [
+            el("button", { type: "button", class: "boton secundario chico", "aria-label": "Subir motivo", disabled: i === 0 ? "" : false, onclick: function () { mover(-1); } }, [document.createTextNode("↑")]),
+            el("button", { type: "button", class: "boton secundario chico", "aria-label": "Bajar motivo", disabled: i === lista.length - 1 ? "" : false, onclick: function () { mover(1); } }, [document.createTextNode("↓")]),
+            el("button", { type: "button", class: "boton peligro chico", onclick: function () {
+              if (!confirm("¿Eliminar el motivo «" + (p.titulo || "sin título") + "»?")) return;
+              lista.splice(i, 1); actualizarEstado(); dibujarSeccion();
+            } }, [document.createTextNode("Eliminar")])
+          ])
+        ]),
+        el("div", { class: "campo" }, [el("label", { for: "punto-titulo-" + i, texto: "Título" }), titulo]),
+        el("div", { class: "campo" }, [el("label", { for: "punto-texto-" + i, texto: "Texto" }), texto])
+      ]));
+    });
+
+    contenedor.appendChild(el("button", { type: "button", class: "boton secundario", disabled: lista.length >= 8 ? "" : false, onclick: function () {
+      lista.push({ titulo: "", texto: "" });
+      actualizarEstado(); dibujarSeccion();
+      var ultimo = document.getElementById("punto-titulo-" + (lista.length - 1));
+      if (ultimo) ultimo.focus();
+    } }, [document.createTextNode("+ Agregar motivo")]));
+    return contenedor;
+  }
+
   // Reduce la imagen a 900 px de ancho como máximo y la convierte a JPG.
   function prepararFoto(archivo) {
     return new Promise(function (resolver, rechazar) {
@@ -344,6 +397,7 @@
     s.bloques.forEach(function (b) {
       if (b.tarjetas) return contenido.appendChild(bloqueTarjetas());
       if (b.foto) return contenido.appendChild(bloqueFoto());
+      if (b.puntos) return contenido.appendChild(bloquePuntos());
       contenido.appendChild(el("div", { class: "tarjeta" },
         [b.titulo ? el("h3", { texto: b.titulo }) : null].concat(b.campos.map(campoTexto))));
     });

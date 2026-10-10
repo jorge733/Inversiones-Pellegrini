@@ -63,6 +63,14 @@ function tarjetas(datos) {
         </article>`).join("\n");
 }
 
+const CHECK_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+function puntos(datos) {
+  return ((datos.porQue && datos.porQue.puntos) || []).map((p) =>
+    `          <li><span class="chk">${CHECK_SVG}</span><span><strong>${escapar(p.titulo)}:</strong> ${escapar(p.texto)}</span></li>`
+  ).join("\n");
+}
+
 function canales(datos) {
   const c = datos.contacto || {};
   const lista = [];
@@ -94,6 +102,7 @@ function botonWhatsapp(datos) {
 function renderizar(plantilla, datos) {
   const bloques = {
     TARJETAS: tarjetas(datos),
+    PUNTOS: puntos(datos),
     CANALES: canales(datos),
     MOTIVOS: motivos(datos),
     BOTON_WHATSAPP: botonWhatsapp(datos)

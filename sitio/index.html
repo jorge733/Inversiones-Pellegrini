@@ -174,6 +174,27 @@
   .why h3{font-size:1.15rem}
   .why p{color:var(--muted);margin:0;font-size:.95rem}
 
+  /* Por qué elegirnos: texto a la izquierda, logo en círculo a la derecha */
+  #por-que{overflow:hidden}
+  .why-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:56px;align-items:center}
+  .why-layout .section-head{margin-bottom:28px}
+  .why-sub{font-size:1.3rem;margin:0 0 16px}
+  .why-list{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:14px}
+  .why-list li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start;color:var(--muted)}
+  .why-list li strong{color:var(--ink)}
+  .why-list .chk{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+                 background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+  .why-cierre{font-family:Fraunces,Georgia,serif;font-size:1.25rem;font-weight:600;color:var(--ink);margin:0}
+  .why-mark{width:min(360px,100%);aspect-ratio:1;justify-self:center;border-radius:50%;display:grid;place-items:center;
+            border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+            box-shadow:0 0 0 40px color-mix(in srgb,var(--accent) 5%,transparent),0 0 0 90px color-mix(in srgb,var(--accent) 3%,transparent)}
+  .why-mark .badge{width:62%;height:62%;display:grid;place-items:center;background:#fff;border-radius:50%;
+                   box-shadow:0 14px 40px #0f254726;color:#0f2547;--logo-blue:#1f6fe0;animation:float 6s ease-in-out infinite}
+  .why-mark svg{height:60%;width:auto;overflow:visible}
+  @media (max-width:860px){
+    .why-layout{grid-template-columns:1fr;gap:72px}
+    .why-mark{width:min(240px,70%);box-shadow:0 0 0 26px color-mix(in srgb,var(--accent) 5%,transparent),0 0 0 56px color-mix(in srgb,var(--accent) 3%,transparent);margin-bottom:40px}
+  }
   /* About */
   .about{display:grid;grid-template-columns:320px 1fr;gap:56px;align-items:center}
   .photo{aspect-ratio:4/5;border-radius:var(--radius);border:1px solid var(--line);display:grid;place-items:center;
@@ -272,12 +293,20 @@
   </section>
 
   <section id="por-que">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="eyebrow">{{porQue.etiqueta}}</div>
-        <h2>{{porQue.titulo}}</h2>
-        <p>{{porQue.texto}}</p>
+    <div class="wrap why-layout">
+      <div>
+        <div class="section-head">
+          <div class="eyebrow">{{porQue.etiqueta}}</div>
+          <h2>{{porQue.titulo}}</h2>
+          <p>{{porQue.texto}}</p>
+        </div>
+        <h3 class="why-sub">{{porQue.subtitulo}}</h3>
+        <ul class="why-list">
+<!--@PUNTOS-->
+        </ul>
+        <p class="why-cierre">{{porQue.cierre}}</p>
       </div>
+      <div class="why-mark" aria-hidden="true"><div class="badge"><svg viewBox="0 0 60 72"><use href="#logo-mark"/></svg></div></div>
     </div>
   </section>
 
@@ -380,7 +409,7 @@
   addEventListener("scroll", () => header.classList.toggle("scrolled", scrollY > 8), { passive: true });
 
   // Aparición de los bloques al entrar en pantalla, con un pequeño escalonado entre hermanos
-  const revealTargets = document.querySelectorAll(".section-head, .grid > *, .why > div, .about > *, .steps > *, .band .wrap > *, .contact > *, .disclaimer");
+  const revealTargets = document.querySelectorAll(".section-head, .grid > *, .why-list > li, .why-mark, .why-sub, .why-cierre, .why > div, .about > *, .steps > *, .band .wrap > *, .contact > *, .disclaimer");
   revealTargets.forEach(el => {
     el.classList.add("reveal");
     const i = [...el.parentElement.children].filter(c => c.classList.contains("reveal")).indexOf(el);

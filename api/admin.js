@@ -43,6 +43,15 @@ function url(valor, nombre) {
   return t;
 }
 
+function puntosValidos(lista) {
+  lista = Array.isArray(lista) ? lista : [];
+  if (lista.length > 8) throw new Error("Puede haber como máximo 8 puntos en «Por qué elegirnos».");
+  return lista.map((p, i) => ({
+    titulo: texto(p && p.titulo, `Punto ${i + 1}: título`, 80, true),
+    texto: texto(p && p.texto, `Punto ${i + 1}: texto`, 300, true)
+  }));
+}
+
 // Reconstruye el contenido campo por campo: solo se guarda lo que el sitio usa.
 function validarDatos(d) {
   if (!d || typeof d !== "object") throw new Error("El contenido no tiene el formato esperado.");
@@ -74,7 +83,10 @@ function validarDatos(d) {
     porQue: {
       etiqueta: texto(s("porQue").etiqueta, "Etiqueta", 60, false),
       titulo: texto(s("porQue").titulo, "Título", 160, true),
-      texto: texto(s("porQue").texto, "Texto", 1200, true)
+      texto: texto(s("porQue").texto, "Texto", 1200, true),
+      subtitulo: texto(s("porQue").subtitulo, "Subtítulo de los puntos", 120, false),
+      puntos: puntosValidos(s("porQue").puntos),
+      cierre: texto(s("porQue").cierre, "Frase de cierre", 200, false)
     },
     quienes: {
       nombre: texto(s("quienes").nombre, "Nombre", 80, true),
