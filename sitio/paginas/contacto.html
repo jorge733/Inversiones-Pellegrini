@@ -1,0 +1,40 @@
+<section id="contacto">
+    <div class="wrap contact">
+      <div>
+        <div class="eyebrow">Contacto</div>
+        <h2>{{contacto.titulo}}</h2>
+        <p style="color:var(--muted)">{{contacto.texto}}</p>
+        <div class="channels">
+<!--@CANALES-->
+        </div>
+      </div>
+      <form id="form" onsubmit="return enviar(event)">
+        <label class="f full">Nombre y apellido<input name="nombre" required autocomplete="name"></label>
+        <label class="f">Teléfono<input name="telefono" type="tel" required autocomplete="tel"></label>
+        <label class="f">Correo electrónico<input name="correo" type="email" required autocomplete="email"></label>
+        <label class="f">Motivo de consulta
+          <select name="motivo" id="motivo" required>
+            <option value="">Selecciona…</option>
+            <option>Solicitar asesoría</option>
+            <option>Quiero invertir</option>
+            <option>Conocer una oportunidad</option>
+            <option>Evaluar mi proyecto</option>
+<!--@MOTIVOS-->
+            <option>Hablar con un asesor</option>
+          </select>
+        </label>
+        <label class="f">Rango de inversión <span style="color:var(--muted);font-weight:400">(opcional)</span>
+          <select name="inversion">
+            <option value="">Prefiero no indicar</option>
+            <option>Desde $25 millones</option>
+            <option>Desde $50 millones</option>
+            <option>Desde $100 millones</option>
+            <option>Desde $200 millones</option>
+          </select>
+        </label>
+        <label class="f full">Mensaje<textarea name="mensaje"></textarea></label>
+        <div class="f full"><button class="btn" type="submit">Enviar consulta</button></div>
+        <div class="ok" id="ok" role="status"></div>
+      </form>
+    </div>
+  </section>

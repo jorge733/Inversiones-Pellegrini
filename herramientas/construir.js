@@ -1,11 +1,11 @@
-// Arma el sitio publicable en public/ a partir de la plantilla (sitio/index.html)
-// y del contenido editable (datos/sitio.json).
+// Arma el sitio publicable en public/ a partir de la base común (sitio/plantilla.html),
+// las páginas (sitio/paginas/*.html) y el contenido editable (datos/sitio.json).
 //
 // Vercel lo ejecuta en cada publicación (ver vercel.json). En el computador: npm run build
 //
-// En la plantilla:
+// En las plantillas:
 //   {{seccion.campo}}   se reemplaza por el texto del campo, con los caracteres HTML escapados.
-//   <!--@BLOQUE-->      se reemplaza por HTML generado aquí (tarjetas, canales de contacto, etc.).
+//   <!--@BLOQUE-->      se reemplaza por HTML generado aquí (tarjetas, menú, canales de contacto, etc.).
 
 const fs = require("fs");
 const path = require("path");
@@ -14,6 +14,33 @@ const RAIZ = path.join(__dirname, "..");
 const ORIGEN = path.join(RAIZ, "sitio");
 const DESTINO = path.join(RAIZ, "public");
 const DATOS = path.join(RAIZ, "datos", "sitio.json");
+
+// Cada página del sitio. "salida" es el archivo en public/; con cleanUrls, /oportunidades sirve oportunidades.html.
+const PAGINAS = [
+  { id: "inicio", ruta: "/", salida: "index.html", menu: "Inicio", titulo: "Inversiones Pellegrini",
+    descripcion: "Invertimos en el mercado nacional e internacional. Asesoría en inversiones con visión de mediano y largo plazo." },
+  { id: "oportunidades", ruta: "/oportunidades", salida: "oportunidades.html", menu: "Oportunidades de inversión",
+    titulo: "Oportunidades de inversión · Inversiones Pellegrini",
+    descripcion: "Fondos con garantía inmobiliaria, fondos de deuda internacional, seguros de vida y leaseback." },
+  { id: "por-que-elegirnos", ruta: "/por-que-elegirnos", salida: "por-que-elegirnos.html", menu: "Por qué elegirnos",
+    titulo: "Por qué elegirnos · Inversiones Pellegrini",
+    descripcion: "Oportunidades reales, activos reales e inversión con respaldo." },
+  { id: "quienes-somos", ruta: "/quienes-somos", salida: "quienes-somos.html", menu: "Quiénes somos",
+    titulo: "Quiénes somos · Inversiones Pellegrini",
+    descripcion: "Conoce a Luciano Pellegrini y el enfoque de Inversiones Pellegrini." },
+  { id: "contacto", ruta: "/contacto", salida: "contacto.html", menu: "Contacto", titulo: "Contacto · Inversiones Pellegrini",
+    descripcion: "Conversemos sobre tus objetivos de inversión.", sinLlamado: true }
+];
+
+// Identificador para enlazar a cada tarjeta: "Inversión Nacional" → "inversion-nacional"
+function slug(texto) {
+  return String(texto || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function enlaceContacto(motivo) {
+  return "/contacto?motivo=" + encodeURIComponent(motivo);
+}
 
 const ICONOS = {
   grafico: '<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>',
@@ -54,13 +81,43 @@ function descripcionTarjeta(texto) {
   return `<strong class="card-sub">${escapar(lineas[0])}</strong>` + lineas.slice(1).map(escapar).join("<br>");
 }
 
+function icono(nombre, tamano) {
+  return `<svg width="${tamano}" height="${tamano}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">${ICONOS[nombre] || ICONOS.grafico}</svg>`;
+}
+
 function tarjetas(datos) {
-  return (datos.oportunidades.tarjetas || []).map((t) => `        <article class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">${ICONOS[t.icono] || ICONOS.grafico}</svg></div>
+  return (datos.oportunidades.tarjetas || []).map((t) => `        <article class="card" id="${slug(t.titulo)}">
+          <div class="ico">${icono(t.icono, 22)}</div>
           <h3>${escapar(t.titulo)}</h3>
           <p>${descripcionTarjeta(t.descripcion)}</p>
-          <a href="#contacto" class="link" data-motivo="${escapar(t.titulo)}">Consultar →</a>
+          <a href="${escapar(enlaceContacto(t.titulo))}" class="link">Consultar →</a>
         </article>`).join("\n");
+}
+
+// En el inicio: resumen de las oportunidades, cada una enlazada a su tarjeta en /oportunidades.
+function resumenOportunidades(datos) {
+  const op = datos.oportunidades || {};
+  const items = (op.tarjetas || []).map((t) => `        <a class="card mini" href="/oportunidades#${slug(t.titulo)}">
+          <div class="ico">${icono(t.icono, 22)}</div>
+          <h3>${escapar(t.titulo)}</h3>
+          <span class="link">Ver detalle →</span>
+        </a>`).join("\n");
+  return `<section id="resumen">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>${escapar(op.titulo)}</h2>
+        <p>${escapar(op.subtitulo)}</p>
+      </div>
+      <div class="grid resumen">
+${items}
+      </div>
+      <p class="ver-todas"><a class="btn ghost" href="/oportunidades">Ver todas las oportunidades</a></p>
+    </div>
+  </section>`;
+}
+
+function menu(activa) {
+  return PAGINAS.map((p) => `      <a href="${p.ruta}"${p.id === activa ? ' aria-current="page"' : ""}>${escapar(p.menu)}</a>`).join("\n");
 }
 
 // Texto en párrafos: una línea en blanco separa párrafos; un salto simple se respeta como salto de línea.
@@ -84,10 +141,10 @@ function canales(datos) {
   // Mientras no se ingresen WhatsApp y correo en el panel, se muestran como pendientes.
   lista.push(wa
     ? `<a class="channel" href="https://wa.me/${wa}" target="_blank" rel="noopener"><b>WhatsApp</b><small>${escapar(c.whatsapp)}</small></a>`
-    : `<a class="channel" href="#contacto"><b>WhatsApp</b><small class="todo">Por definir</small></a>`);
+    : `<span class="channel"><b>WhatsApp</b><small class="todo">Por definir</small></span>`);
   lista.push(c.correo
     ? `<a class="channel" href="mailto:${escapar(c.correo)}"><b>Correo</b><small>${escapar(c.correo)}</small></a>`
-    : `<a class="channel" href="#contacto"><b>Correo</b><small class="todo">Por definir</small></a>`);
+    : `<span class="channel"><b>Correo</b><small class="todo">Por definir</small></span>`);
   if (urlSegura(c.agenda)) lista.push(`<a class="channel" href="${escapar(urlSegura(c.agenda))}" target="_blank" rel="noopener"><b>Agendar reunión</b><small>Elige día y hora</small></a>`);
   if (urlSegura(c.linkedin)) lista.push(`<a class="channel" href="${escapar(urlSegura(c.linkedin))}" target="_blank" rel="noopener"><b>LinkedIn</b><small>Inversiones Pellegrini</small></a>`);
   if (urlSegura(c.instagram)) lista.push(`<a class="channel" href="${escapar(urlSegura(c.instagram))}" target="_blank" rel="noopener"><b>Instagram</b><small>Inversiones Pellegrini</small></a>`);
@@ -101,27 +158,35 @@ function motivos(datos) {
 
 function botonWhatsapp(datos) {
   const wa = numeroWhatsapp(datos.contacto && datos.contacto.whatsapp);
-  const destino = wa ? `href="https://wa.me/${wa}" target="_blank" rel="noopener"` : 'href="#contacto"';
+  const destino = wa ? `href="https://wa.me/${wa}" target="_blank" rel="noopener"` : 'href="/contacto"';
   return `<a class="wa" ${destino} aria-label="Escribir por WhatsApp">\n  ${WHATSAPP_SVG}\n</a>`;
 }
 
-function renderizar(plantilla, datos) {
+function renderizar(plantilla, datos, otros) {
   const bloques = {
+    ...(otros || {}),
     TARJETAS: tarjetas(datos),
+    RESUMEN_OPORTUNIDADES: resumenOportunidades(datos),
     PUNTOS: puntos(datos),
     QUIENES_TEXTO: parrafos(datos.quienes && datos.quienes.descripcion, "        ").trimStart(),
     CANALES: canales(datos),
     MOTIVOS: motivos(datos),
     BOTON_WHATSAPP: botonWhatsapp(datos)
   };
-  const extra = { anio: new Date().getFullYear() };
+  const extra = { anio: new Date().getFullYear(), ...((otros && otros.extra) || {}) };
+  delete bloques.extra;
+  // 1) Se arma la plantilla completa (base + página); 2) se reemplazan los {{campos}};
+  // 3) recién al final se insertan los bloques generados, para que el texto de los
+  //    datos nunca se interprete como plantilla.
+  const partes = { CONTENIDO: bloques.CONTENIDO || "", LLAMADO: bloques.LLAMADO || "" };
   return plantilla
-    .replace(/<!--@([A-Z_]+)-->/g, (m, nombre) => (nombre in bloques ? bloques[nombre] : m))
+    .replace(/<!--@(CONTENIDO|LLAMADO)-->/g, (m, nombre) => partes[nombre])
     .replace(/\{\{([a-zA-Z.]+)\}\}/g, (m, ruta) => {
       const v = ruta in extra ? extra[ruta] : valor(datos, ruta);
       if (v === undefined) throw new Error("Falta el campo «" + ruta + "» en datos/sitio.json");
       return escapar(v);
-    });
+    })
+    .replace(/<!--@([A-Z_]+)-->/g, (m, nombre) => (nombre in bloques ? bloques[nombre] : m));
 }
 
 function copiar(origen, destino) {
@@ -131,19 +196,38 @@ function copiar(origen, destino) {
     if (entrada.isDirectory()) {
       fs.mkdirSync(d, { recursive: true });
       copiar(o, d);
-    } else if (!(origen === ORIGEN && entrada.name === "index.html")) {
+    } else {
       fs.copyFileSync(o, d);
     }
   }
 }
 
+// Archivos de sitio/ que son plantillas y no se publican tal cual.
+const NO_COPIAR = new Set(["plantilla.html", "paginas"]);
+
 function construir() {
   const datos = JSON.parse(fs.readFileSync(DATOS, "utf8"));
-  const plantilla = fs.readFileSync(path.join(ORIGEN, "index.html"), "utf8");
+  const base = fs.readFileSync(path.join(ORIGEN, "plantilla.html"), "utf8");
+  const llamado = fs.readFileSync(path.join(ORIGEN, "paginas", "_llamado.html"), "utf8");
   fs.rmSync(DESTINO, { recursive: true, force: true });
   fs.mkdirSync(DESTINO, { recursive: true });
-  copiar(ORIGEN, DESTINO);
-  fs.writeFileSync(path.join(DESTINO, "index.html"), renderizar(plantilla, datos));
+  for (const entrada of fs.readdirSync(ORIGEN, { withFileTypes: true })) {
+    if (NO_COPIAR.has(entrada.name)) continue;
+    const o = path.join(ORIGEN, entrada.name);
+    const d = path.join(DESTINO, entrada.name);
+    if (entrada.isDirectory()) { fs.mkdirSync(d, { recursive: true }); copiar(o, d); }
+    else fs.copyFileSync(o, d);
+  }
+  for (const p of PAGINAS) {
+    const cuerpo = fs.readFileSync(path.join(ORIGEN, "paginas", p.id + ".html"), "utf8");
+    const html = renderizar(base, datos, {
+      CONTENIDO: cuerpo,
+      LLAMADO: p.sinLlamado ? "" : llamado,
+      MENU: menu(p.id),
+      extra: { "pagina.titulo": p.titulo, "pagina.descripcion": p.descripcion }
+    });
+    fs.writeFileSync(path.join(DESTINO, p.salida), html);
+  }
 }
 
 if (require.main === module) {

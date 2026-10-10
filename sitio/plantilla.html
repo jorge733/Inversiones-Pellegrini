@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.classList.add("js")</script>
-<title>Inversiones Pellegrini</title>
-<meta name="description" content="Invertimos en oportunidades que generan valor. Asesoría estratégica en inversiones, gestión patrimonial y seguros.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>{{pagina.titulo}}</title>
+<meta name="description" content="{{pagina.descripcion}}">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Poppins:wght@300;700&display=swap" rel="stylesheet">
@@ -66,7 +66,8 @@
   /* Subrayado animado al pasar el mouse (escritorio) */
   nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:var(--accent);
                transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
-  nav a:hover::after{transform:scaleX(1)}
+  nav a:hover::after,nav a[aria-current="page"]::after{transform:scaleX(1)}
+  nav a[aria-current="page"]{color:var(--accent)}
 
   /* Botón hamburguesa que se transforma en X */
   .menu-btn{display:none;position:relative;width:44px;height:44px;background:none;border:1px solid var(--line);border-radius:10px;cursor:pointer;color:var(--logo-dark)}
@@ -195,6 +196,15 @@
     .why-layout{grid-template-columns:1fr;gap:72px}
     .why-mark{width:min(240px,70%);box-shadow:0 0 0 26px color-mix(in srgb,var(--accent) 5%,transparent),0 0 0 56px color-mix(in srgb,var(--accent) 3%,transparent);margin-bottom:40px}
   }
+  /* Inicio: resumen de oportunidades enlazado a su página */
+  .resumen{grid-template-columns:repeat(4,1fr)}
+  .card.mini{text-decoration:none;color:inherit}
+  .card.mini h3{font-size:1.15rem;flex:1}
+  .card.mini .link{margin-top:10px}
+  .ver-todas{margin:28px 0 0;text-align:center}
+  .ver-todas .btn.ghost{color:var(--ink)}
+  @media (max-width:1000px){ .resumen{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .resumen{grid-template-columns:1fr} }
   /* About */
   .about{display:grid;grid-template-columns:320px 1fr;gap:56px;align-items:center}
   .photo{aspect-ratio:4/5;border-radius:var(--radius);border:1px solid var(--line);display:grid;place-items:center;
@@ -255,124 +265,18 @@
 
 <header>
   <div class="wrap">
-    <a href="#inicio" class="logo"><svg viewBox="0 0 60 72" role="img" aria-label="Inversiones Pellegrini"><use href="#logo-mark"/></svg><span class="wm"><b>INVERSIONES</b><span>PELLEGRINI</span></span></a>
+    <a href="/" class="logo"><svg viewBox="0 0 60 72" role="img" aria-label="Inversiones Pellegrini"><use href="#logo-mark"/></svg><span class="wm"><b>INVERSIONES</b><span>PELLEGRINI</span></span></a>
     <button class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
     <nav id="menu">
-      <a href="#inicio">Inicio</a>
-      <a href="#servicios">Oportunidades de inversión</a>
-      <a href="#por-que">Por qué elegirnos</a>
-      <a href="#quienes-somos">Quiénes somos</a>
-      <a href="#contacto">Contacto</a>
+<!--@MENU-->
     </nav>
   </div>
 </header>
 <div class="backdrop" id="backdrop"></div>
 
 <main>
-  <section class="hero" id="inicio">
-    <div class="hero-mark" aria-hidden="true"><div class="badge"><svg viewBox="0 0 60 72"><use href="#logo-mark"/></svg></div></div>
-    <div class="wrap">
-      <h1>{{bienvenida.titulo}}</h1>
-      <p>{{bienvenida.texto}}</p>
-      <div class="ctas">
-        <a href="#contacto" class="btn" data-motivo="Solicitar asesoría">{{bienvenida.boton}}</a>
-      </div>
-    </div>
-  </section>
-
-  <section id="servicios">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>{{oportunidades.titulo}}</h2>
-        <p>{{oportunidades.subtitulo}}</p>
-      </div>
-      <div class="grid">
-<!--@TARJETAS-->
-      </div>
-      <p class="disclaimer">{{oportunidades.aviso}}</p>
-    </div>
-  </section>
-
-  <section id="por-que">
-    <div class="wrap why-layout">
-      <div>
-        <div class="section-head">
-          <div class="eyebrow">{{porQue.etiqueta}}</div>
-          <h2>{{porQue.titulo}}</h2>
-          <p>{{porQue.texto}}</p>
-        </div>
-        <h3 class="why-sub">{{porQue.subtitulo}}</h3>
-        <ul class="why-list">
-<!--@PUNTOS-->
-        </ul>
-        <p class="why-cierre">{{porQue.cierre}}</p>
-      </div>
-      <div class="why-mark" aria-hidden="true"><div class="badge"><svg viewBox="0 0 60 72"><use href="#logo-mark"/></svg></div></div>
-    </div>
-  </section>
-
-  <section id="quienes-somos" class="alt">
-    <div class="wrap about">
-      <div class="photo"><img src="{{quienes.foto}}" alt="{{quienes.nombre}}" loading="lazy"></div>
-      <div>
-        <div class="eyebrow">Quiénes somos</div>
-        <h2>{{quienes.nombre}}</h2>
-        <!--@QUIENES_TEXTO-->
-        <a href="#contacto" class="btn" data-motivo="Hablar con un asesor">Hablar con un asesor</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="band">
-    <div class="wrap">
-      <h2>{{llamado.titulo}}</h2>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a href="#contacto" class="btn" data-motivo="Quiero invertir">Quiero invertir</a>
-        <a href="#contacto" class="btn ghost" data-motivo="Evaluar mi proyecto">Evaluar mi proyecto</a>
-      </div>
-    </div>
-  </div>
-
-  <section id="contacto">
-    <div class="wrap contact">
-      <div>
-        <div class="eyebrow">Contacto</div>
-        <h2>{{contacto.titulo}}</h2>
-        <p style="color:var(--muted)">{{contacto.texto}}</p>
-        <div class="channels">
-<!--@CANALES-->
-        </div>
-      </div>
-      <form id="form" onsubmit="return enviar(event)">
-        <label class="f full">Nombre y apellido<input name="nombre" required autocomplete="name"></label>
-        <label class="f">Teléfono<input name="telefono" type="tel" required autocomplete="tel"></label>
-        <label class="f">Correo electrónico<input name="correo" type="email" required autocomplete="email"></label>
-        <label class="f">Motivo de consulta
-          <select name="motivo" id="motivo" required>
-            <option value="">Selecciona…</option>
-            <option>Solicitar asesoría</option>
-            <option>Quiero invertir</option>
-            <option>Conocer una oportunidad</option>
-            <option>Evaluar mi proyecto</option>
-<!--@MOTIVOS-->
-            <option>Hablar con un asesor</option>
-          </select>
-        </label>
-        <label class="f">Rango de inversión <span style="color:var(--muted);font-weight:400">(opcional)</span>
-          <select name="inversion">
-            <option value="">Prefiero no indicar</option>
-            <option>Desde $25 millones</option>
-            <option>Desde $50 millones</option>
-            <option>Desde $100 millones</option>
-            <option>Desde $200 millones</option>
-          </select>
-        </label>
-        <label class="f full">Mensaje<textarea name="mensaje"></textarea></label>
-        <div class="f full"><button class="btn" type="submit">Enviar consulta</button></div>
-        <div class="ok" id="ok" role="status"></div>
-      </form>
-    </div>
-  </section>
+<!--@CONTENIDO-->
+<!--@LLAMADO-->
 </main>
 
 <footer>
@@ -386,10 +290,13 @@
 <!--@BOTON_WHATSAPP-->
 
 <script>
-  // Los botones de llamado a la acción preseleccionan el motivo en el formulario
-  document.querySelectorAll("[data-motivo]").forEach(a => a.addEventListener("click", () => {
-    document.getElementById("motivo").value = a.dataset.motivo;
-  }));
+  // En la página de contacto, el motivo que viene en la dirección (?motivo=...) queda seleccionado
+  const selectorMotivo = document.getElementById("motivo");
+  const motivoPedido = new URLSearchParams(location.search).get("motivo");
+  if (selectorMotivo && motivoPedido) {
+    if (![...selectorMotivo.options].some(o => o.value === motivoPedido)) selectorMotivo.add(new Option(motivoPedido, motivoPedido));
+    selectorMotivo.value = motivoPedido;
+  }
 
   // Menú móvil: abre/cierra con animación; se cierra al elegir una sección, tocar fuera o presionar Esc
   const menu = document.getElementById("menu"), menuBtn = document.getElementById("menu-btn"), backdrop = document.getElementById("backdrop");

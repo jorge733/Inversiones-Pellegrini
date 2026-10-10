@@ -67,6 +67,8 @@ function atenderArchivo(res, url) {
   if (!archivo.startsWith(PUBLICO)) { res.statusCode = 403; return res.end(); }
   let destino = archivo;
   if (fs.existsSync(destino) && fs.statSync(destino).isDirectory()) destino = path.join(destino, "index.html");
+  // Igual que cleanUrls en Vercel: /oportunidades sirve oportunidades.html
+  if (!fs.existsSync(destino) && !path.extname(destino)) destino += ".html";
   if (!fs.existsSync(destino)) { res.statusCode = 404; return res.end("No encontrado"); }
   res.setHeader("Content-Type", TIPOS[path.extname(destino).toLowerCase()] || "application/octet-stream");
   fs.createReadStream(destino).pipe(res);

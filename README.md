@@ -7,9 +7,10 @@ Sitio web de Inversiones Pellegrini, publicado en **Vercel**, con un panel priva
 | Ruta | Qué contiene |
 |---|---|
 | `datos/sitio.json` | Todo el contenido editable: textos, tarjetas de oportunidades, perfil, foto y datos de contacto. |
-| `sitio/index.html` | Plantilla de la página. `{{seccion.campo}}` se reemplaza por el texto; `<!--@BLOQUE-->` por HTML generado. |
+| `sitio/plantilla.html` | Base común de todas las páginas: estilos, encabezado con menú, pie y scripts. |
+| `sitio/paginas/*.html` | Contenido de cada página: `inicio`, `oportunidades`, `por-que-elegirnos`, `quienes-somos`, `contacto` y la franja final (`_llamado`). `{{seccion.campo}}` se reemplaza por el texto; `<!--@BLOQUE-->` por HTML generado. |
 | `sitio/` | Archivos estáticos: favicon, imágenes (`img/`) y el panel (`admin/`). |
-| `herramientas/construir.js` | Une plantilla y datos, y genera el sitio en `public/` (no se sube al repositorio). |
+| `herramientas/construir.js` | Une base, páginas y datos, y genera el sitio en `public/` (no se sube al repositorio). La lista de páginas y sus títulos está en `PAGINAS`. |
 | `api/admin.js`, `api/estado.js` | Funciones del panel en Vercel. |
 | `lib/` | Sesión, límite de intentos y guardado en GitHub (basado en el panel de ehda.cl). |
 
