@@ -25,7 +25,7 @@
         { ruta: "bienvenida.boton", etiqueta: "Texto del botón", max: 40, ayuda: "El botón lleva al formulario de contacto." }
       ] }
     ] },
-    { id: "oportunidades", titulo: "Oportunidades disponibles", descripcion: "Las tarjetas con las alternativas de inversión. Cada tarjeta tiene un botón «Consultar».", bloques: [
+    { id: "oportunidades", titulo: "Oportunidades de inversión", descripcion: "Las tarjetas con las alternativas de inversión. Cada tarjeta tiene un botón «Consultar».", bloques: [
       { campos: [
         { ruta: "oportunidades.titulo", etiqueta: "Título de la sección", max: 120 },
         { ruta: "oportunidades.subtitulo", etiqueta: "Subtítulo", max: 300 }
