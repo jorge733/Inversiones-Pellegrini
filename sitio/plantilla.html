@@ -244,6 +244,29 @@
   .band h2{margin:0;max-width:22ch}
   .band .btn.ghost{color:var(--navy-ink)}
 
+  /* Contacto: elegir entre agendar una reunión o dejar los datos */
+  .opciones{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+  .opcion{display:flex;gap:14px;align-items:flex-start;text-align:left;font:inherit;color:var(--ink);cursor:pointer;
+          background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:20px;
+          transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+  .opcion:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));transform:translateY(-2px)}
+  .opcion[aria-selected="true"]{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+  .opcion b{display:block;font-size:1.1rem;margin-bottom:4px}
+  .opcion small{display:block;color:var(--muted);font-size:.92rem;line-height:1.45}
+  .opcion-ico{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+              background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+  .opcion[aria-selected="true"] .opcion-ico{background:var(--accent);color:var(--accent-ink)}
+  .panel-opcion{animation:fadeUp .4s ease both}
+  .panel-opcion h3{font-size:1.15rem;margin-bottom:0}
+  .agenda-marco{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .agenda-marco iframe{display:block;width:100%;height:720px;border:0}
+  .agenda-alt{font-size:.88rem;color:var(--muted);margin:10px 0 0}
+  .agenda-alt a{color:var(--accent);font-weight:600}
+  .agenda-pendiente{background:var(--surface);border:1.5px dashed var(--line);border-radius:var(--radius);padding:32px;text-align:center}
+  .agenda-pendiente p{margin:0 0 8px;color:var(--muted)}
+  .agenda-pendiente p b{color:var(--ink)}
+  .agenda-pendiente .btn{margin-top:12px}
+  @media (max-width:720px){ .opciones{grid-template-columns:1fr} .agenda-marco iframe{height:880px} }
   /* Contact */
   .contact{display:grid;grid-template-columns:1fr 1.4fr;gap:48px}
   .channels{display:grid;gap:12px;margin:24px 0}
@@ -311,6 +334,29 @@
 <!--@BOTON_WHATSAPP-->
 
 <script>
+  // Contacto: pestañas «Agenda una reunión» / «Pide que te contactemos»
+  const pestanas = [...document.querySelectorAll('.opciones [role="tab"]')];
+  function mostrarOpcion(id, enfocar){
+    pestanas.forEach(t => {
+      const activa = t.id === "tab-" + id;
+      t.setAttribute("aria-selected", activa);
+      t.tabIndex = activa ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !activa;
+      if (activa && enfocar) t.focus();
+    });
+  }
+  pestanas.forEach((t, i) => {
+    t.addEventListener("click", () => mostrarOpcion(t.id.replace("tab-", "")));
+    t.addEventListener("keydown", e => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      const otra = pestanas[(i + (e.key === "ArrowRight" ? 1 : pestanas.length - 1)) % pestanas.length];
+      mostrarOpcion(otra.id.replace("tab-", ""), true);
+    });
+  });
+  document.querySelectorAll("[data-ir-a]").forEach(b => b.addEventListener("click", () => mostrarOpcion(b.dataset.irA, true)));
+  // Si se llega con un motivo (botones «Consultar») o con ?opcion=datos, se abre directamente el formulario.
+  const parametros = new URLSearchParams(location.search);
+  if (pestanas.length && (parametros.has("motivo") || parametros.get("opcion") === "datos")) mostrarOpcion("datos");
   // En la página de contacto, el motivo que viene en la dirección (?motivo=...) queda seleccionado
   const selectorMotivo = document.getElementById("motivo");
   const motivoPedido = new URLSearchParams(location.search).get("motivo");

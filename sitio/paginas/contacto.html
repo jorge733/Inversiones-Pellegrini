@@ -1,40 +1,64 @@
 <section id="contacto">
-    <div class="wrap contact">
-      <div>
+    <div class="wrap">
+      <div class="section-head">
         <div class="eyebrow">Contacto</div>
         <h2>{{contacto.titulo}}</h2>
-        <p style="color:var(--muted)">{{contacto.texto}}</p>
-        <div class="channels">
+        <p>{{contacto.texto}}</p>
+      </div>
+
+      <!-- Dos formas de contacto: agendar una reunión o pedir que lo contacten -->
+      <div class="opciones" role="tablist" aria-label="Elige cómo quieres contactarnos">
+        <button class="opcion" type="button" role="tab" id="tab-agenda" aria-controls="panel-agenda" aria-selected="true">
+          <span class="opcion-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2"/></svg></span>
+          <span><b>Agenda una reunión</b><small>{{contacto.agendaTexto}}</small></span>
+        </button>
+        <button class="opcion" type="button" role="tab" id="tab-datos" aria-controls="panel-datos" aria-selected="false" tabindex="-1">
+          <span class="opcion-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span>
+          <span><b>Pide que te contactemos</b><small>Déjanos tus datos y un asesor se comunicará contigo.</small></span>
+        </button>
+      </div>
+
+      <div class="panel-opcion" id="panel-agenda" role="tabpanel" aria-labelledby="tab-agenda">
+<!--@AGENDA-->
+      </div>
+
+      <div class="panel-opcion" id="panel-datos" role="tabpanel" aria-labelledby="tab-datos" hidden>
+        <div class="contact">
+          <div>
+            <h3>Otros canales</h3>
+            <div class="channels">
 <!--@CANALES-->
+            </div>
+          </div>
+          <form id="form" onsubmit="return enviar(event)">
+            <label class="f full">Nombre y apellido<input name="nombre" required autocomplete="name"></label>
+            <label class="f">Teléfono<input name="telefono" type="tel" required autocomplete="tel"></label>
+            <label class="f">Correo electrónico<input name="correo" type="email" required autocomplete="email"></label>
+            <label class="f">Motivo de consulta
+              <select name="motivo" id="motivo" required>
+                <option value="">Selecciona…</option>
+                <option>Solicitar asesoría</option>
+                <option>Quiero invertir</option>
+                <option>Conocer una oportunidad</option>
+                <option>Evaluar mi proyecto</option>
+<!--@MOTIVOS-->
+                <option>Hablar con un asesor</option>
+              </select>
+            </label>
+            <label class="f">Rango de inversión <span style="color:var(--muted);font-weight:400">(opcional)</span>
+              <select name="inversion">
+                <option value="">Prefiero no indicar</option>
+                <option>Desde $25 millones</option>
+                <option>Desde $50 millones</option>
+                <option>Desde $100 millones</option>
+                <option>Desde $200 millones</option>
+              </select>
+            </label>
+            <label class="f full">Mensaje<textarea name="mensaje"></textarea></label>
+            <div class="f full"><button class="btn" type="submit">Enviar mis datos</button></div>
+            <div class="ok" id="ok" role="status"></div>
+          </form>
         </div>
       </div>
-      <form id="form" onsubmit="return enviar(event)">
-        <label class="f full">Nombre y apellido<input name="nombre" required autocomplete="name"></label>
-        <label class="f">Teléfono<input name="telefono" type="tel" required autocomplete="tel"></label>
-        <label class="f">Correo electrónico<input name="correo" type="email" required autocomplete="email"></label>
-        <label class="f">Motivo de consulta
-          <select name="motivo" id="motivo" required>
-            <option value="">Selecciona…</option>
-            <option>Solicitar asesoría</option>
-            <option>Quiero invertir</option>
-            <option>Conocer una oportunidad</option>
-            <option>Evaluar mi proyecto</option>
-<!--@MOTIVOS-->
-            <option>Hablar con un asesor</option>
-          </select>
-        </label>
-        <label class="f">Rango de inversión <span style="color:var(--muted);font-weight:400">(opcional)</span>
-          <select name="inversion">
-            <option value="">Prefiero no indicar</option>
-            <option>Desde $25 millones</option>
-            <option>Desde $50 millones</option>
-            <option>Desde $100 millones</option>
-            <option>Desde $200 millones</option>
-          </select>
-        </label>
-        <label class="f full">Mensaje<textarea name="mensaje"></textarea></label>
-        <div class="f full"><button class="btn" type="submit">Enviar consulta</button></div>
-        <div class="ok" id="ok" role="status"></div>
-      </form>
     </div>
   </section>

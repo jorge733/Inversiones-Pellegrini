@@ -61,7 +61,8 @@
       { titulo: "Datos de contacto", campos: [
         { ruta: "contacto.whatsapp", etiqueta: "WhatsApp", max: 30, tipo: "tel", ayuda: "Con código de país, por ejemplo +56 9 1234 5678. También activa el botón verde de WhatsApp." },
         { ruta: "contacto.correo", etiqueta: "Correo", max: 120, tipo: "email" },
-        { ruta: "contacto.agenda", etiqueta: "Enlace para agendar reunión (opcional)", max: 300, tipo: "url", ayuda: "Por ejemplo, tu enlace de Calendly o de Google Calendar." },
+        { ruta: "contacto.agenda", etiqueta: "Enlace de la agenda en línea", max: 300, tipo: "url", ayuda: "La página de reservas de Google Calendar (enlace del código para insertar) o de Calendly. Se muestra dentro de la opción «Agenda una reunión». Mientras esté vacío, esa opción invita a dejar los datos." },
+        { ruta: "contacto.agendaTexto", etiqueta: "Texto de la opción «Agenda una reunión»", max: 200 },
         { ruta: "contacto.linkedin", etiqueta: "LinkedIn (opcional)", max: 300, tipo: "url" },
         { ruta: "contacto.instagram", etiqueta: "Instagram (opcional)", max: 300, tipo: "url" }
       ] },

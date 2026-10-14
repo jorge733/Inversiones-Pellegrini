@@ -102,6 +102,7 @@ function validarDatos(d) {
       whatsapp: texto(s("contacto").whatsapp, "WhatsApp", 30, false),
       correo,
       agenda: url(s("contacto").agenda, "Enlace para agendar"),
+      agendaTexto: texto(s("contacto").agendaTexto, "Texto de la opción Agenda", 200, true),
       linkedin: url(s("contacto").linkedin, "LinkedIn"),
       instagram: url(s("contacto").instagram, "Instagram")
     },

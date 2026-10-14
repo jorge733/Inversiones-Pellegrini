@@ -149,10 +149,26 @@ function canales(datos) {
   lista.push(c.correo
     ? `<a class="channel" href="mailto:${escapar(c.correo)}"><b>Correo</b><small>${escapar(c.correo)}</small></a>`
     : `<span class="channel"><b>Correo</b><small class="todo">Por definir</small></span>`);
-  if (urlSegura(c.agenda)) lista.push(`<a class="channel" href="${escapar(urlSegura(c.agenda))}" target="_blank" rel="noopener"><b>Agendar reunión</b><small>Elige día y hora</small></a>`);
   if (urlSegura(c.linkedin)) lista.push(`<a class="channel" href="${escapar(urlSegura(c.linkedin))}" target="_blank" rel="noopener"><b>LinkedIn</b><small>Inversiones Pellegrini</small></a>`);
   if (urlSegura(c.instagram)) lista.push(`<a class="channel" href="${escapar(urlSegura(c.instagram))}" target="_blank" rel="noopener"><b>Instagram</b><small>Inversiones Pellegrini</small></a>`);
   return lista.map((l) => "          " + l).join("\n");
+}
+
+// Agenda en línea (Google Calendar, Calendly u otro): se inserta la página de reservas.
+// Mientras no haya enlace, se muestra un aviso y la opción de dejar los datos.
+function agenda(datos) {
+  const url = urlSegura(datos.contacto && datos.contacto.agenda);
+  if (!url) {
+    return `        <div class="agenda-pendiente">
+          <p><b>La agenda en línea estará disponible muy pronto.</b></p>
+          <p>Mientras tanto, déjanos tus datos y te contactaremos para coordinar la reunión.</p>
+          <button class="btn" type="button" data-ir-a="datos">Pedir que me contacten</button>
+        </div>`;
+  }
+  return `        <div class="agenda-marco">
+          <iframe src="${escapar(url)}" title="Agenda una reunión con Inversiones Pellegrini" loading="lazy"></iframe>
+        </div>
+        <p class="agenda-alt">¿No se ve la agenda? <a href="${escapar(url)}" target="_blank" rel="noopener">Ábrela en una pestaña nueva ↗</a></p>`;
 }
 
 function motivos(datos) {
@@ -174,6 +190,7 @@ function renderizar(plantilla, datos, otros) {
     PUNTOS: puntos(datos),
     QUIENES_TEXTO: parrafos(datos.quienes && datos.quienes.descripcion, "        ").trimStart(),
     CANALES: canales(datos),
+    AGENDA: agenda(datos),
     MOTIVOS: motivos(datos),
     BOTON_WHATSAPP: botonWhatsapp(datos)
   };
