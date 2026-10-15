@@ -282,6 +282,7 @@
   .f textarea{min-height:110px;resize:vertical}
   .f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
   .ok{grid-column:1/-1;display:none;padding:14px;border-radius:10px;background:color-mix(in srgb,var(--accent) 16%,transparent)}
+  .ok.error{background:color-mix(in srgb,#d64545 16%,transparent)}
   @media (max-width:820px){ .contact{grid-template-columns:1fr} form{grid-template-columns:1fr} }
 
   footer{background:var(--navy);color:var(--navy-muted);padding:36px 0;font-size:.85rem}
@@ -404,13 +405,44 @@
   }), { threshold: .15, rootMargin: "0px 0px -40px 0px" });
   revealTargets.forEach(el => io.observe(el));
 
-  function enviar(e){
+  // Formulario «Pide que te contactemos»: se envía con FormSubmit al correo de contacto del panel.
+  // El primer envío a un correo nuevo llega como un aviso de activación que hay que confirmar una vez.
+  async function enviar(e){
     e.preventDefault();
-    const nombre = e.target.nombre.value.trim().split(" ")[0];
-    const ok = document.getElementById("ok");
-    ok.style.display = "block";
-    ok.textContent = `Gracias, ${nombre}. (Simulación) Un asesor te contactará a la brevedad.`;
-    e.target.reset();
+    const form = e.target, ok = document.getElementById("ok"), boton = form.querySelector("button[type=submit]");
+    const destino = form.dataset.destino;
+    const nombre = form.nombre.value.trim().split(" ")[0];
+    const datos = Object.fromEntries(new FormData(form));
+    if (datos._honey) return false;
+    function aviso(texto, error){
+      ok.textContent = texto;
+      ok.classList.toggle("error", !!error);
+      ok.style.display = "block";
+    }
+    if (!destino) { aviso("Por ahora no podemos recibir mensajes por aquí. Agenda una reunión o escríbenos directamente.", true); return false; }
+    boton.disabled = true;
+    boton.textContent = "Enviando…";
+    try {
+      const r = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(destino), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          "Nombre": datos.nombre, "Teléfono": datos.telefono, "Correo": datos.correo,
+          "Motivo": datos.motivo, "Rango de inversión": datos.inversion || "No indicado", "Mensaje": datos.mensaje || "",
+          _replyto: datos.correo, _subject: "Nueva consulta web: " + datos.motivo + " · " + datos.nombre,
+          _template: "table", _captcha: "false", _honey: ""
+        })
+      });
+      const res = await r.json().catch(() => ({}));
+      if (!r.ok || String(res.success) !== "true") throw new Error(res.message || r.status);
+      aviso(`Gracias, ${nombre}. Recibimos tus datos y un asesor te contactará a la brevedad.`);
+      form.reset();
+    } catch (err) {
+      aviso(`No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos a ${destino}.`, true);
+    } finally {
+      boton.disabled = false;
+      boton.textContent = "Enviar mis datos";
+    }
     return false;
   }
 </script>
