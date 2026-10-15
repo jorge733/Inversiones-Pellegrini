@@ -27,6 +27,12 @@ h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0 0 .4em;line
 .caja-acceso h1{font-size:1.5rem;margin:0}
 .caja-acceso p{margin:0 0 10px;color:var(--muted)}
 .caja-acceso label{text-align:left;font-weight:600;font-size:.9rem}
+.campo-clave{position:relative}
+.campo-clave input{padding-right:46px}
+.ver-clave{position:absolute;top:50%;right:6px;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center;
+  background:none;border:0;border-radius:8px;color:var(--muted);cursor:pointer}
+.ver-clave:hover{color:var(--ink);background:#eef2f8}
+.ver-clave:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .error{color:var(--danger);min-height:1.2em;margin:4px 0 0!important;font-size:.9rem}
 
 /* Barra superior */

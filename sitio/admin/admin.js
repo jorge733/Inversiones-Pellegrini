@@ -491,6 +491,21 @@
     });
   }
 
+  function verClave(mostrar) {
+    var boton = $("ver-clave");
+    $("clave-admin").type = mostrar ? "text" : "password";
+    boton.setAttribute("aria-pressed", mostrar ? "true" : "false");
+    boton.setAttribute("aria-label", mostrar ? "Ocultar contraseña" : "Mostrar contraseña");
+    // Los SVG no tienen la propiedad hidden; se usa el atributo.
+    boton.querySelector(".ojo-abierto").toggleAttribute("hidden", mostrar);
+    boton.querySelector(".ojo-cerrado").toggleAttribute("hidden", !mostrar);
+  }
+
+  $("ver-clave").addEventListener("click", function () {
+    verClave($("clave-admin").type === "password");
+    $("clave-admin").focus();
+  });
+
   $("formulario-acceso").addEventListener("submit", function (e) {
     e.preventDefault();
     var boton = $("boton-entrar");
@@ -498,6 +513,7 @@
     $("error-acceso").textContent = "";
     api("entrar", { clave: $("clave-admin").value }).then(function () {
       $("clave-admin").value = "";
+      verClave(false);
       mostrarPanel();
     }).catch(function (err) {
       $("error-acceso").textContent = err.message;
