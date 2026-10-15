@@ -165,8 +165,17 @@ function agenda(datos) {
           <button class="btn" type="button" data-ir-a="datos">Pedir que me contacten</button>
         </div>`;
   }
+  // Calendly: parámetros de su inserción oficial (sin aviso de cookies propio y en modo integrado).
+  let src = url;
+  if (/^https:\/\/calendly\.com\//i.test(url)) {
+    const u = new URL(url);
+    u.searchParams.set("embed_domain", new URL(DOMINIO).hostname);
+    u.searchParams.set("embed_type", "Inline");
+    u.searchParams.set("hide_gdpr_banner", "1");
+    src = u.toString();
+  }
   return `        <div class="agenda-marco">
-          <iframe src="${escapar(url)}" title="Agenda una reunión con Inversiones Pellegrini" loading="lazy"></iframe>
+          <iframe src="${escapar(src)}" title="Agenda una reunión con Inversiones Pellegrini" loading="lazy"></iframe>
         </div>
         <p class="agenda-alt">¿No se ve la agenda? <a href="${escapar(url)}" target="_blank" rel="noopener">Ábrela en una pestaña nueva ↗</a></p>`;
 }
