@@ -50,12 +50,16 @@
         { ruta: "porQue.cierre", etiqueta: "Frase de cierre", max: 200 }
       ] }
     ] },
-    { id: "quienes", titulo: "Quiénes somos", descripcion: "Tu presentación personal y tu fotografía.", bloques: [
+    { id: "quienes", titulo: "Quiénes somos", descripcion: "Tu presentación personal, tu fotografía y las demás personas del equipo.", bloques: [
       { foto: true },
       { campos: [
         { ruta: "quienes.nombre", etiqueta: "Nombre", max: 80 },
         { ruta: "quienes.descripcion", etiqueta: "Descripción", max: 2500, largo: true, ayuda: "Para separar párrafos, deja una línea en blanco entre ellos." }
-      ] }
+      ] },
+      { titulo: "Equipo", campos: [
+        { ruta: "quienes.equipoTitulo", etiqueta: "Título de la sección del equipo", max: 80, ayuda: "Se muestra sobre las personas del equipo, debajo de tu presentación." }
+      ] },
+      { equipo: true }
     ] },
     { id: "contacto", titulo: "Contacto", descripcion: "Datos de contacto, enlaces y la franja que invita a escribir.", bloques: [
       { titulo: "Datos de contacto", campos: [
@@ -82,7 +86,7 @@
   var estado = {
     datos: null,          // contenido que se está editando
     original: "",         // contenido guardado (para saber si hay cambios)
-    foto: null,           // { ruta, base64, previa } si se eligió una foto nueva
+    fotos: {},            // fotos nuevas sin guardar: { "img/subidas/x.jpg": { base64, previa } }
     seccion: "bienvenida",
     guardando: false
   };
@@ -149,7 +153,23 @@
   /* ---------- Cambios pendientes ---------- */
 
   function hayCambios() {
-    return Boolean(estado.foto) || JSON.stringify(estado.datos) !== estado.original;
+    return Object.keys(estado.fotos).length > 0 || JSON.stringify(estado.datos) !== estado.original;
+  }
+
+  // Fotos en uso: la principal y las del equipo.
+  function fotosEnUso() {
+    var q = estado.datos.quienes;
+    return [q.foto].concat((q.equipo || []).map(function (p) { return p.foto; })).filter(Boolean);
+  }
+
+  // Olvida las fotos nuevas que ya no se usan (por ejemplo, al quitar a una persona).
+  function limpiarFotos() {
+    var enUso = fotosEnUso();
+    Object.keys(estado.fotos).forEach(function (r) { if (enUso.indexOf(r) < 0) delete estado.fotos[r]; });
+  }
+
+  function vistaFoto(ruta) {
+    return estado.fotos[ruta] ? estado.fotos[ruta].previa : "/" + ruta;
   }
 
   function seccionesConCambios() {
@@ -161,7 +181,7 @@
       if (s.id === "contacto") claves.push("llamado");
       cambios[s.id] = claves.some(function (k) { return JSON.stringify(estado.datos[k]) !== JSON.stringify(original[k]); });
     });
-    if (estado.foto) cambios.quienes = true;
+    if (Object.keys(estado.fotos).length) cambios.quienes = true;
     return cambios;
   }
 
@@ -358,36 +378,125 @@
     });
   }
 
-  function bloqueFoto() {
-    var ruta = leer("quienes.foto");
-    var vista = el("img", { src: estado.foto ? estado.foto.previa : "/" + ruta, alt: "Fotografía actual" });
-    var entrada = el("input", { type: "file", accept: "image/jpeg,image/png,image/webp", id: "foto-archivo", hidden: "" });
+  // Selector de archivo que prepara la foto y la deja pendiente. "prefijo" da el comienzo del nombre del archivo;
+  // "alElegir" recibe la ruta nueva dentro de sitio/.
+  function entradaFoto(id, prefijo, alElegir) {
+    var entrada = el("input", { type: "file", accept: "image/jpeg,image/png,image/webp", id: id, hidden: "" });
     entrada.addEventListener("change", function () {
       var archivo = entrada.files[0];
       if (!archivo) return;
       prepararFoto(archivo).then(function (r) {
-        var nombre = "luciano-" + Date.now().toString(36) + ".jpg";
-        estado.foto = { ruta: "sitio/img/subidas/" + nombre, base64: r.base64, previa: r.previa };
-        estado.datos.quienes.foto = "img/subidas/" + nombre;
+        var ruta = "img/subidas/" + prefijo() + "-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + ".jpg";
+        estado.fotos[ruta] = { base64: r.base64, previa: r.previa };
+        alElegir(ruta);
+        limpiarFotos();
         actualizarEstado();
         dibujarSeccion();
       }).catch(function (e) { avisar(e.message, "error", 6000); });
     });
+    return entrada;
+  }
+
+  // Para el nombre del archivo: "María José" → "maria-jose"
+  function slug(texto) {
+    return String(texto || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "persona";
+  }
+
+  function bloqueFoto() {
+    var ruta = leer("quienes.foto");
+    var nueva = Boolean(estado.fotos[ruta]);
+    var vista = el("img", { src: vistaFoto(ruta), alt: "Fotografía actual" });
     var acciones = [
       el("label", { for: "foto-archivo", class: "boton secundario", texto: "Elegir otra foto" }),
-      entrada,
+      entradaFoto("foto-archivo", function () { return "luciano"; }, function (r) { estado.datos.quienes.foto = r; }),
       el("p", { class: "ayuda", texto: "La foto se muestra en un círculo: conviene una imagen cuadrada, con el rostro centrado. Se ajusta automáticamente a 900 px de ancho." })
     ];
-    if (estado.foto) {
+    if (nueva) {
       acciones.unshift(el("span", { class: "marca-pendiente", texto: "Foto nueva sin guardar" }));
       acciones.push(el("button", { type: "button", class: "boton peligro chico", onclick: function () {
         estado.datos.quienes.foto = JSON.parse(estado.original).quienes.foto;
-        estado.foto = null;
+        limpiarFotos();
         actualizarEstado(); dibujarSeccion();
       } }, [document.createTextNode("Deshacer cambio de foto")]));
     }
     return el("div", { class: "tarjeta" }, [el("h3", { texto: "Fotografía" }),
       el("div", { class: "foto-editor" }, [vista, el("div", { class: "acciones" }, acciones)])]);
+  }
+
+  function bloqueEquipo() {
+    var quienes = estado.datos.quienes;
+    var lista = quienes.equipo = quienes.equipo || [];
+    var contenedor = el("div", { class: "tarjeta" }, [el("h3", { texto: "Personas del equipo" }),
+      el("p", { class: "ayuda", texto: "Hasta 12 personas, que se muestran en tarjetas debajo de tu presentación. La foto es opcional: sin foto se muestran sus iniciales. Mientras no haya nadie, la sección no aparece en el sitio." })]);
+
+    lista.forEach(function (p, i) {
+      var etiqueta = function () { return p.nombre || "Persona " + (i + 1); };
+      var nombreVista = el("span", { texto: etiqueta() });
+      var campo = function (clave, texto, max, largo) {
+        var id = "persona-" + clave + "-" + i;
+        var entrada = largo ? el("textarea", { id: id, rows: 3 }) : el("input", { id: id, type: "text", autocomplete: "off" });
+        entrada.value = p[clave] || "";
+        var contador = el("div", { class: "contador" });
+        function contar() {
+          contador.textContent = entrada.value.length + " / " + max;
+          contador.classList.toggle("excede", entrada.value.length > max);
+        }
+        entrada.addEventListener("input", function () {
+          p[clave] = entrada.value;
+          if (clave === "nombre") nombreVista.textContent = etiqueta();
+          contar(); actualizarEstado();
+        });
+        contar();
+        return el("div", { class: "campo" }, [el("label", { for: id, texto: texto }), entrada, contador]);
+      };
+      function mover(delta) {
+        var j = i + delta;
+        if (j < 0 || j >= lista.length) return;
+        lista.splice(j, 0, lista.splice(i, 1)[0]);
+        actualizarEstado(); dibujarSeccion();
+      }
+
+      var idArchivo = "persona-foto-" + i;
+      var accionesFoto = [
+        el("label", { for: idArchivo, class: "boton secundario chico", texto: p.foto ? "Cambiar foto" : "Agregar foto" }),
+        entradaFoto(idArchivo, function () { return slug(p.nombre); }, function (r) { p.foto = r; })
+      ];
+      if (p.foto) {
+        accionesFoto.push(el("button", { type: "button", class: "boton peligro chico", onclick: function () {
+          p.foto = ""; limpiarFotos(); actualizarEstado(); dibujarSeccion();
+        } }, [document.createTextNode("Quitar foto")]));
+      }
+      if (estado.fotos[p.foto]) accionesFoto.unshift(el("span", { class: "marca-pendiente", texto: "Foto nueva sin guardar" }));
+      var retrato = p.foto
+        ? el("img", { src: vistaFoto(p.foto), alt: "Foto de " + etiqueta() })
+        : el("span", { class: "sin-foto", texto: "Sin foto" });
+
+      contenedor.appendChild(el("div", { class: "item" }, [
+        el("div", { class: "item-cabecera" }, [
+          el("strong", {}, [nombreVista]),
+          el("div", { class: "item-acciones" }, [
+            el("button", { type: "button", class: "boton secundario chico", "aria-label": "Subir persona", disabled: i === 0 ? "" : false, onclick: function () { mover(-1); } }, [document.createTextNode("↑")]),
+            el("button", { type: "button", class: "boton secundario chico", "aria-label": "Bajar persona", disabled: i === lista.length - 1 ? "" : false, onclick: function () { mover(1); } }, [document.createTextNode("↓")]),
+            el("button", { type: "button", class: "boton peligro chico", onclick: function () {
+              if (!confirm("¿Quitar a «" + etiqueta() + "» del equipo?")) return;
+              lista.splice(i, 1); limpiarFotos(); actualizarEstado(); dibujarSeccion();
+            } }, [document.createTextNode("Eliminar")])
+          ])
+        ]),
+        el("div", { class: "foto-editor chico" }, [retrato, el("div", { class: "acciones" }, accionesFoto)]),
+        el("div", { class: "fila mitades" }, [campo("nombre", "Nombre", 80), campo("cargo", "Cargo (opcional)", 80)]),
+        campo("descripcion", "Descripción (opcional)", 800, true)
+      ]));
+    });
+
+    contenedor.appendChild(el("button", { type: "button", class: "boton secundario", disabled: lista.length >= 12 ? "" : false, onclick: function () {
+      lista.push({ nombre: "", cargo: "", descripcion: "", foto: "" });
+      actualizarEstado(); dibujarSeccion();
+      var ultimo = document.getElementById("persona-nombre-" + (lista.length - 1));
+      if (ultimo) ultimo.focus();
+    } }, [document.createTextNode("+ Agregar persona")]));
+    return contenedor;
   }
 
   function dibujarSeccion() {
@@ -399,6 +508,7 @@
       if (b.tarjetas) return contenido.appendChild(bloqueTarjetas());
       if (b.foto) return contenido.appendChild(bloqueFoto());
       if (b.puntos) return contenido.appendChild(bloquePuntos());
+      if (b.equipo) return contenido.appendChild(bloqueEquipo());
       contenido.appendChild(el("div", { class: "tarjeta" },
         [b.titulo ? el("h3", { texto: b.titulo }) : null].concat(b.campos.map(campoTexto))));
     });
@@ -412,11 +522,12 @@
     $("boton-guardar").disabled = true;
     $("boton-descartar").disabled = true;
     $("texto-guardar").textContent = "Guardando…";
-    var cuerpo = { datos: estado.datos, archivos: estado.foto ? [{ ruta: estado.foto.ruta, base64: estado.foto.base64 }] : [] };
-    api("guardar", cuerpo).then(function (r) {
+    limpiarFotos();
+    var archivos = Object.keys(estado.fotos).map(function (r) { return { ruta: "sitio/" + r, base64: estado.fotos[r].base64 }; });
+    api("guardar", { datos: estado.datos, archivos: archivos }).then(function (r) {
       estado.datos = r.datos;
       estado.original = JSON.stringify(r.datos);
-      estado.foto = null;
+      estado.fotos = {};
       dibujarSeccion();
       seguirPublicacion(r.version);
     }).catch(function (e) {
@@ -455,7 +566,7 @@
   function descartar() {
     if (!confirm("¿Descartar todos los cambios sin guardar?")) return;
     estado.datos = JSON.parse(estado.original);
-    estado.foto = null;
+    estado.fotos = {};
     actualizarEstado();
     dibujarSeccion();
   }

@@ -18,10 +18,10 @@ Sitio web de Inversiones Pellegrini, publicado en **Vercel**, con un panel priva
 
 Luciano entra a `https://<dominio>/admin` con una contraseña y puede editar:
 bienvenida, tarjetas de oportunidades (agregar, quitar, ordenar y cambiar ícono), «Por qué elegirnos»,
-su nombre, descripción y foto, datos de contacto (WhatsApp, correo, agenda, LinkedIn, Instagram) y avisos legales.
+su nombre, descripción y foto, las demás personas del equipo en «Quiénes somos» (agregar, quitar, ordenar, con foto opcional), datos de contacto (WhatsApp, correo, agenda, LinkedIn, Instagram) y avisos legales.
 El diseño, los colores y la estructura no se editan desde el panel.
 
-**Cómo guarda:** cada «Guardar cambios» crea un commit en GitHub con `datos/sitio.json` (y la foto, si cambió).
+**Cómo guarda:** cada «Guardar cambios» crea un commit en GitHub con `datos/sitio.json` (y las fotos nuevas, si hay).
 Vercel lo detecta, vuelve a generar el sitio y lo publica en 1–2 minutos; el panel avisa cuando ya está en línea.
 Todo cambio queda en el historial de git y se puede revertir.
 

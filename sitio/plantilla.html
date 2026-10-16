@@ -237,6 +237,17 @@
   .photo{overflow:hidden;background:none;aspect-ratio:1;border-radius:50%;border:0;box-shadow:0 0 0 8px var(--surface),0 0 0 9px var(--line),0 18px 40px #0f25471f}
   .photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;transform:scale(1.03)}
   @media (max-width:780px){ .about{grid-template-columns:1fr;gap:28px} .photo{max-width:260px} }
+  /* Equipo */
+  .equipo{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .persona{align-items:center;text-align:center}
+  .persona .retrato{width:128px;aspect-ratio:1;border-radius:50%;overflow:hidden;margin-bottom:18px;display:grid;place-items:center;
+                    background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);
+                    font:600 2.2rem Fraunces,Georgia,serif;box-shadow:0 0 0 6px var(--surface),0 0 0 7px var(--line)}
+  .persona .retrato img{width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block}
+  .persona h3{margin-bottom:.2em}
+  .persona .role{margin:0 0 .8em}
+  .persona p:not(.role){flex:none;margin:0 0 .8em}
+  .persona p:last-child{margin-bottom:0}
 
   /* CTA band */
   .band{background:var(--navy);color:var(--navy-ink);padding:64px 0}

@@ -81,6 +81,12 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-
 .foto-editor{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
 .foto-editor img{width:150px;aspect-ratio:1;object-fit:cover;object-position:center 30%;border-radius:50%;border:1px solid var(--line)}
 .foto-editor .acciones{display:grid;gap:8px;max-width:320px}
+.foto-editor.chico{gap:14px;align-items:center;margin-bottom:14px}
+.foto-editor.chico img,.sin-foto{width:84px}
+.foto-editor.chico .acciones{display:flex;flex-wrap:wrap;align-items:center;max-width:none}
+.sin-foto{aspect-ratio:1;border-radius:50%;border:1.5px dashed var(--line);display:grid;place-items:center;
+  color:var(--muted);font-size:.75rem;text-align:center;flex:none}
+.fila.mitades{grid-template-columns:1fr 1fr}
 .marca-pendiente{display:inline-block;background:#fff4d6;color:#8a5a00;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:600}
 
 /* Guardar y avisos */
@@ -98,7 +104,7 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-
   .cuerpo{grid-template-columns:1fr;gap:16px;padding-top:16px}
   .menu ul{display:none}
   #menu-movil{display:block}
-  .fila{grid-template-columns:1fr}
+  .fila,.fila.mitades{grid-template-columns:1fr}
   .barra-superior{padding:10px 14px}
   .marca small{display:none}
 }

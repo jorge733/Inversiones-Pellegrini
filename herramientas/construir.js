@@ -138,6 +138,42 @@ function puntos(datos) {
   ).join("\n");
 }
 
+// Iniciales para quien no tiene foto: "María José Soto" → "MS"
+function iniciales(nombre) {
+  const palabras = String(nombre || "").trim().split(/\s+/).filter(Boolean);
+  if (!palabras.length) return "";
+  const primera = palabras[0][0];
+  const ultima = palabras.length > 1 ? palabras[palabras.length - 1][0] : "";
+  return (primera + ultima).toUpperCase();
+}
+
+// Las demás personas del equipo, bajo la presentación principal. Sin personas, no se muestra la sección.
+function equipo(datos) {
+  const q = datos.quienes || {};
+  const lista = Array.isArray(q.equipo) ? q.equipo : [];
+  if (!lista.length) return "";
+  const personas = lista.map((p) => {
+    const retrato = p.foto
+      ? `<img src="/${escapar(p.foto)}" alt="${escapar(p.nombre)}" loading="lazy">`
+      : `<span aria-hidden="true">${escapar(iniciales(p.nombre))}</span>`;
+    return `        <article class="card persona">
+          <div class="retrato">${retrato}</div>
+          <h3>${escapar(p.nombre)}</h3>
+${p.cargo ? `          <p class="role">${escapar(p.cargo)}</p>\n` : ""}${parrafos(p.descripcion, "          ")}
+        </article>`;
+  }).join("\n");
+  return `<section id="equipo">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>${escapar(q.equipoTitulo || "Nuestro equipo")}</h2>
+      </div>
+      <div class="grid equipo">
+${personas}
+      </div>
+    </div>
+  </section>`;
+}
+
 function canales(datos) {
   const c = datos.contacto || {};
   const lista = [];
@@ -198,6 +234,7 @@ function renderizar(plantilla, datos, otros) {
     RESUMEN_OPORTUNIDADES: resumenOportunidades(datos),
     PUNTOS: puntos(datos),
     QUIENES_TEXTO: parrafos(datos.quienes && datos.quienes.descripcion, "        ").trimStart(),
+    EQUIPO: equipo(datos),
     CANALES: canales(datos),
     AGENDA: agenda(datos),
     MOTIVOS: motivos(datos),

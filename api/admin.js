@@ -4,7 +4,7 @@
 //   POST salir       Cierra la sesión.
 //   GET  sesion      ¿Hay una sesión activa?
 //   GET  contenido   El contenido editable (datos/sitio.json), leído desde el repositorio.
-//   POST guardar     { datos, archivos } Guarda el contenido y, si hay, la foto nueva.
+//   POST guardar     { datos, archivos } Guarda el contenido y, si hay, las fotos nuevas.
 
 const repo = require("../lib/repositorio");
 const sesion = require("../lib/sesion");
@@ -16,6 +16,10 @@ const FOTO = /^img\/(subidas\/)?[a-z0-9][a-z0-9-]{0,80}\.(jpg|jpeg|png|webp)$/;
 const ARCHIVO_PERMITIDO = /^sitio\/img\/subidas\/[a-z0-9][a-z0-9-]{0,80}\.(jpg|jpeg|png|webp)$/;
 const FIRMAS = { jpg: [0xff, 0xd8, 0xff], jpeg: [0xff, 0xd8, 0xff], png: [0x89, 0x50, 0x4e, 0x47], webp: [0x52, 0x49, 0x46, 0x46] };
 const MAX_BYTES_FOTO = 3 * 1024 * 1024;
+// Vercel limita el cuerpo de cada solicitud a 4,5 MB; el panel reduce las fotos antes de enviarlas.
+const MAX_BYTES_SUBIDA = 4 * 1024 * 1024;
+const MAX_FOTOS_SUBIDA = 6;
+const MAX_EQUIPO = 12;
 
 function responderError(res, estado, mensaje) {
   return res.status(estado).json({ error: mensaje });
@@ -50,6 +54,21 @@ function puntosValidos(lista) {
     titulo: texto(p && p.titulo, `Punto ${i + 1}: título`, 80, true),
     texto: texto(p && p.texto, `Punto ${i + 1}: texto`, 300, true)
   }));
+}
+
+function equipoValido(lista) {
+  lista = Array.isArray(lista) ? lista : [];
+  if (lista.length > MAX_EQUIPO) throw new Error(`Puede haber como máximo ${MAX_EQUIPO} personas en el equipo.`);
+  return lista.map((p, i) => {
+    const foto = texto(p && p.foto, `Persona ${i + 1}: foto`, 120, false);
+    if (foto && !FOTO.test(foto)) throw new Error(`La foto de la persona ${i + 1} no es válida.`);
+    return {
+      nombre: texto(p && p.nombre, `Persona ${i + 1}: nombre`, 80, true),
+      cargo: texto(p && p.cargo, `Persona ${i + 1}: cargo`, 80, false),
+      descripcion: texto(p && p.descripcion, `Persona ${i + 1}: descripción`, 800, false),
+      foto
+    };
+  });
 }
 
 // Reconstruye el contenido campo por campo: solo se guarda lo que el sitio usa.
@@ -91,7 +110,9 @@ function validarDatos(d) {
     quienes: {
       nombre: texto(s("quienes").nombre, "Nombre", 80, true),
       descripcion: texto(s("quienes").descripcion, "Descripción", 2500, true),
-      foto
+      foto,
+      equipoTitulo: texto(s("quienes").equipoTitulo, "Título del equipo", 80, false),
+      equipo: equipoValido(s("quienes").equipo)
     },
     llamado: {
       titulo: texto(s("llamado").titulo, "Título de la franja final", 160, true)
@@ -165,11 +186,17 @@ module.exports = async function handler(req, res) {
     if (accion === "guardar") {
       if (req.method !== "POST") return responderError(res, 405, "Método no permitido");
       const archivos = Array.isArray(cuerpo.archivos) ? cuerpo.archivos : [];
-      if (archivos.length > 1) return responderError(res, 400, "Solo se puede subir una imagen a la vez.");
+      if (archivos.length > MAX_FOTOS_SUBIDA) {
+        return responderError(res, 400, `Se pueden subir como máximo ${MAX_FOTOS_SUBIDA} fotos a la vez. Guarda y vuelve a intentar con el resto.`);
+      }
       archivos.forEach(validarArchivo);
+      const bytes = archivos.reduce((n, a) => n + Buffer.byteLength(a.base64, "base64"), 0);
+      if (bytes > MAX_BYTES_SUBIDA) return responderError(res, 400, "Las fotos pesan demasiado en conjunto. Guarda de a una o dos fotos por vez.");
       const datos = validarDatos(cuerpo.datos);
-      if (archivos.length && "sitio/" + datos.quienes.foto !== archivos[0].ruta) {
-        return responderError(res, 400, "La foto subida no coincide con la del contenido.");
+      // Cada foto subida tiene que estar en uso: la principal o la de alguien del equipo.
+      const enUso = new Set([datos.quienes.foto].concat(datos.quienes.equipo.map((p) => p.foto)).map((f) => "sitio/" + f));
+      if (archivos.some((a) => !enUso.has(a.ruta))) {
+        return responderError(res, 400, "Una de las fotos subidas no coincide con el contenido.");
       }
       const cambios = archivos.map((a) => ({ ruta: a.ruta, base64: a.base64 }));
       cambios.push({ ruta: RUTA_DATOS, texto: JSON.stringify(datos, null, 2) + "\n" });
